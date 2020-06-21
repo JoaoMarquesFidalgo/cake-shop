@@ -20,9 +20,11 @@ The frontend will use ReactJS.
 
 21/06/2020 - 
 
-The project is in early development stage. Currently on NodeJS creating a workflow setup and the first Mongo classes.
+Added the Payment Model and its CRUD, also included an error and message json and a way to handle promises in different methods for GET/POST/PUT/DELETE.
 
 Added NodeJS skeleton following guidance from [a rocketseat video](https://tinyurl.com/y7yappfd), and added Typegoose.
+
+The project is in early development stage. Currently on NodeJS creating a workflow setup and the first Mongo classes.
 
 19/06/2020 - 21/06/2020
 
