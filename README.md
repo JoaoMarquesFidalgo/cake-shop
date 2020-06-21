@@ -13,14 +13,16 @@ There is also a company's folder with the project requirements, technologies use
 ## Technologies Used
 
 The project will use Typescript in both backend and frontend. 
-The backend will use NodeJS, Express, Typegoose and MongoDB.
+The backend will use NodeJS, Express, Typegoose, MongoDB and Jest.
 The frontend will use ReactJS.
 
 ## Log of Events
 
-21/06/2020 -
+21/06/2020 - 
 
 The project is in early development stage. Currently on NodeJS creating a workflow setup and the first Mongo classes.
+
+Added NodeJS skeleton following guidance from [a rocketseat video](https://tinyurl.com/y7yappfd), and added Typegoose.
 
 19/06/2020 - 21/06/2020
 
