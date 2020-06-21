@@ -6,7 +6,10 @@ export function handlePostPromise (functionToCall: Function, req: Request, res: 
     .then((response: typeof objectType) => {
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
-    .catch(() => {
+    .catch((errorMessage) => {
+      if (errorMessage) {
+        return res.json(new GeneralResponse({ ...errorMessage }))
+      }
       return res.json(new GeneralResponse({ ...objectError }))
     })
 }

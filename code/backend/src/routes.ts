@@ -3,24 +3,20 @@ import { addPaymentType, getPaymentTypes, deletePaymentType, getOnePaymentType, 
 
 const routes = Router()
 
-routes.get('/users', (req: Request, res: Response) => {
-  return res.json([{ name: 'joao', email: 'joao@email.com' }])
-})
-
-// Payment types
-routes.post('/paymentType', (req: Request, res: Response) => {
+// Payment Routes
+routes.post('/payment', (req: Request, res: Response) => {
   return addPaymentType(req, res)
 })
-routes.get('/paymentType', (req: Request, res: Response) => {
+routes.get('/payment', (req: Request, res: Response) => {
   return getPaymentTypes(req, res)
 })
-routes.delete('/paymentType/:id', (req: Request, res: Response) => {
+routes.delete('/payment/:id', (req: Request, res: Response) => {
   return deletePaymentType(req, res)
 })
-routes.get('/paymentType/:id', (req: Request, res: Response) => {
+routes.get('/payment/:id', (req: Request, res: Response) => {
   return getOnePaymentType(req, res)
 })
-routes.put('/paymentType/:id', (req: Request, res: Response) => {
+routes.put('/payment/:id', (req: Request, res: Response) => {
   return updateOnePaymentType(req, res)
 })
 

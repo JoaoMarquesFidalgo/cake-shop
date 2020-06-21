@@ -1,27 +1,27 @@
-export const paymentTypeSuccess = {
+export const paymentSuccess = {
   1000: {
     error: false,
     code: 1000,
-    description: 'Payment type added with success'
+    description: 'Payment added with success'
   },
   1001: {
     error: false,
     code: 1001,
-    description: 'Payment types fetched with success'
+    description: 'Payment fetched with success'
   },
   1002: {
     error: false,
     code: 1002,
-    description: 'Payment type delete with success'
+    description: 'Payment deleted with success'
   },
   1003: {
     error: false,
     code: 1003,
-    description: 'Payment type returned with success'
+    description: 'Payment returned with success'
   },
   1004: {
     error: false,
     code: 1004,
-    description: 'Payment type updated with success'
+    description: 'Payment updated with success'
   }
 }
