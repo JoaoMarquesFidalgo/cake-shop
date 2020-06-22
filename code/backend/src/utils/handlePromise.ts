@@ -29,7 +29,10 @@ export function handleDeletePromise (id: string, functionToCall: Function, res: 
     .then((response: typeof objectType) => {
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
-    .catch(() => {
+    .catch((errorMessage) => {
+      if (errorMessage) {
+        return res.json(new GeneralResponse({ ...errorMessage }))
+      }
       return res.json(new GeneralResponse({ ...objectError }))
     })
 }
@@ -39,7 +42,10 @@ export function handleGetOnePromise (id: string, functionToCall: Function, res: 
     .then((response: typeof objectType) => {
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
-    .catch(() => {
+    .catch((errorMessage) => {
+      if (errorMessage) {
+        return res.json(new GeneralResponse({ ...errorMessage }))
+      }
       return res.json(new GeneralResponse({ ...objectError }))
     })
 }

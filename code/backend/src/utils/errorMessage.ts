@@ -1,3 +1,16 @@
+export const generalError = {
+  800: {
+    error: true,
+    code: 800,
+    description: 'Wrong ID provided'
+  },
+  801: {
+    error: true,
+    code: 801,
+    description: 'Please provide value information'
+  }
+}
+
 export const paymentError = {
   1000: {
     error: true,
@@ -33,5 +46,69 @@ export const paymentError = {
     error: true,
     code: 1006,
     description: 'Missing payment fields'
+  }
+}
+
+export const costumerError = {
+  2000: {
+    error: true,
+    code: 2000,
+    description: 'Couldn\'t add costumer'
+  },
+  2001: {
+    error: true,
+    code: 2001,
+    description: 'Couldn\'t fetch costumer'
+  },
+  2002: {
+    error: true,
+    code: 2002,
+    description: 'Couldn\'t disable costumer'
+  },
+  2003: {
+    error: true,
+    code: 2003,
+    description: 'Couldn\'t return costumer'
+  },
+  2004: {
+    error: true,
+    code: 2004,
+    description: 'Couldn\'t update costumer'
+  },
+  2005: {
+    error: true,
+    code: 2005,
+    description: 'No values were passed to update the costumer'
+  },
+  2006: {
+    error: true,
+    code: 2006,
+    description: 'Missing costumer fields'
+  },
+  2007: {
+    error: true,
+    code: 2007,
+    description: 'No email was provided'
+  },
+  2008: {
+    error: true,
+    code: 2008,
+    description: 'Email already registered'
+  },
+  2009: {
+    error: true,
+    code: 2009,
+    description: 'State of account must be active'
+  },
+  2010: {
+    error: true,
+    code: 2010,
+    description: 'Email provided in not correct'
+  },
+  // TODO: Change this
+  2011: {
+    error: true,
+    code: 2011,
+    description: 'Please provide value information'
   }
 }

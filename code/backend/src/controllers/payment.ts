@@ -1,71 +1,101 @@
-import { paymentError } from './../utils/errorMessage'
+import { typesOfValue } from 'src/enum/typesValues'
+import { paymentError, generalError } from '@utils/errorMessage'
 import { Request, Response } from 'express'
-import { PaymentTypeModel, Payment } from '@models/Payment'
+import { PaymentModel, Payment } from '@models/Payment'
 import { paymentSuccess } from '@utils/successMessage'
 import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
+import { verifyObjectId } from '@utils/verifyObjectId'
+import { sanitizeValidateValue } from '@utils/sanitizeValues'
 
-function addPaymentType (req: Request, res: Response): void {
-  handlePostPromise(createPaymentTypeAsync, req, res, paymentSuccess['1000'], paymentError['1000'], Payment)
+function addPayment (req: Request, res: Response): void {
+  handlePostPromise(createPaymentAsync, req, res, paymentSuccess['1000'], paymentError['1000'], Payment)
 }
 
-async function createPaymentTypeAsync (paymentType: Payment): Promise<Payment> {
-  if (!paymentType.deliveryStatus || !paymentType.deliveryStatus || !paymentType.deliveryStatus) {
+async function createPaymentAsync (payment: Payment): Promise<Payment> {
+  if (!payment.paymentMethod || !payment.paymentStatus || !payment.deliveryStatus) {
     throw paymentError['1006']
   }
-  const { _id: id } = await PaymentTypeModel.create(paymentType)
-  return await PaymentTypeModel.findById(id).exec()
+  if (!verifyPaymentFields(payment)) {
+    throw generalError['801']
+  }
+
+  const { _id: id } = await PaymentModel.create(payment)
+  return await PaymentModel.findById(id).exec()
 }
 
-function getPaymentTypes (req: Request, res: Response) {
-  handleGetPromise(getPaymentTypesAsync, res, paymentSuccess['1001'], paymentError['1001'], Payment)
+function getPayments (req: Request, res: Response) {
+  handleGetPromise(getPaymentsAsync, res, paymentSuccess['1001'], paymentError['1001'], Payment)
 }
 
-async function getPaymentTypesAsync (): Promise<Payment[]> {
-  return await PaymentTypeModel.find().exec()
+async function getPaymentsAsync (): Promise<Payment[]> {
+  return await PaymentModel.find().exec()
 }
 
-function deletePaymentType (req: Request, res: Response) {
-  handleDeletePromise(req.params.id, deletePaymentTypeAsync, res, paymentSuccess['1002'], paymentError['1002'], Payment)
+function deletePayment (req: Request, res: Response) {
+  handleDeletePromise(req.params.id, deletePaymentAsync, res, paymentSuccess['1002'], paymentError['1002'], Payment)
 }
 
-async function deletePaymentTypeAsync (id: string): Promise<Payment> {
-  const deleted = await PaymentTypeModel.findOneAndDelete({ _id: id }).exec()
+async function deletePaymentAsync (id: string): Promise<Payment> {
+  if (!verifyObjectId(id)) {
+    throw generalError['800']
+  }
+
+  const deleted = await PaymentModel.findOneAndDelete({ _id: id }).exec()
   if (!deleted) {
     throw paymentError['1002']
   }
   return deleted
 }
 
-function getOnePaymentType (req: Request, res: Response) {
-  handleGetOnePromise(req.params.id, getOnePaymentTypeAsync, res, paymentSuccess['1003'], paymentError['1003'], Payment)
+function getOnePayment (req: Request, res: Response) {
+  handleGetOnePromise(req.params.id, getOnePaymentAsync, res, paymentSuccess['1003'], paymentError['1003'], Payment)
 }
 
-async function getOnePaymentTypeAsync (id: string): Promise<Payment> {
-  const getOnePaymentType = await PaymentTypeModel.findById(id).exec()
-  if (!getOnePaymentType) {
+async function getOnePaymentAsync (id: string): Promise<Payment> {
+  if (!verifyObjectId(id)) {
+    throw generalError['800']
+  }
+
+  const getOnePayment = await PaymentModel.findById(id).exec()
+  if (!getOnePayment) {
     throw paymentError['1003']
   }
-  return getOnePaymentType
+  return getOnePayment
 }
 
-function updateOnePaymentType (req: Request, res: Response) {
-  handleUpdatePromise(req.params.id, updateOnePaymentTypeTypeAsync, req, res, paymentSuccess['1004'], paymentError['1004'], Payment)
+function updateOnePayment (req: Request, res: Response) {
+  handleUpdatePromise(req.params.id, updateOnePaymentTypeAsync, req, res, paymentSuccess['1004'], paymentError['1004'], Payment)
 }
 
-async function updateOnePaymentTypeTypeAsync (id: string, paymentType: Payment): Promise<Payment> {
-  if (Object.keys(paymentType).length === 0) {
+async function updateOnePaymentTypeAsync (id: string, payment: Payment): Promise<Payment> {
+  if (!verifyObjectId(id)) {
+    throw generalError['800']
+  }
+  if (Object.keys(payment).length === 0) {
     throw paymentError['1005']
   }
-
-  if (!paymentType.deliveryStatus || !paymentType.deliveryStatus || !paymentType.deliveryStatus) {
+  if (!payment.paymentMethod || !payment.paymentStatus || !payment.deliveryStatus) {
     throw paymentError['1006']
   }
+  if (!verifyPaymentFields(payment)) {
+    throw generalError['801']
+  }
 
-  const getOnePaymentType = await PaymentTypeModel.findByIdAndUpdate(id, paymentType, { new: true }).exec()
-  if (!getOnePaymentType) {
+  const getOnePayment = await PaymentModel.findByIdAndUpdate(id, payment, { new: true }).exec()
+  if (!getOnePayment) {
     throw paymentError['1004']
   }
-  return getOnePaymentType
+  return getOnePayment
 }
 
-export { addPaymentType, getPaymentTypes, deletePaymentType, getOnePaymentType, updateOnePaymentType }
+function verifyPaymentFields (payment: Payment): boolean {
+  const validDS = sanitizeValidateValue(typesOfValue.WORD, payment.deliveryStatus)
+  if (!validDS) return false
+  const validPM = sanitizeValidateValue(typesOfValue.WORD, payment.paymentMethod)
+  if (!validPM) return false
+  const validPS = sanitizeValidateValue(typesOfValue.WORD, payment.paymentStatus)
+  if (!validPS) return false
+  return true
+}
+
+export { addPayment, getPayments, deletePayment, getOnePayment, updateOnePayment }

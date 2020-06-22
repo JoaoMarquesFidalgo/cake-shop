@@ -25,3 +25,31 @@ export const paymentSuccess = {
     description: 'Payment updated with success'
   }
 }
+
+export const costumerSuccess = {
+  2000: {
+    error: false,
+    code: 2000,
+    description: 'Costumer added with success'
+  },
+  2001: {
+    error: false,
+    code: 2001,
+    description: 'All active costumers fetched with success'
+  },
+  2002: {
+    error: false,
+    code: 2002,
+    description: 'Costumer deleted with success'
+  },
+  2003: {
+    error: false,
+    code: 2003,
+    description: 'Costumer returned with success'
+  },
+  2004: {
+    error: false,
+    code: 2004,
+    description: 'Costumer updated with success'
+  }
+}

@@ -1,0 +1,3 @@
+export enum typesOfValue {
+    WORD, EMAIL, NUMBER, JSON, PHONE, BOOLEAN, DATE, OBJECT_ID, PASSWORD
+}

@@ -1,6 +1,7 @@
 import { prop, getModelForClass } from '@typegoose/typegoose'
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 
-export class Payment {
+export class Payment extends TimeStamps {
   @prop()
   public paymentMethod: string;
 
@@ -11,4 +12,4 @@ export class Payment {
   public deliveryStatus: string;
 }
 
-export const PaymentTypeModel = getModelForClass(Payment)
+export const PaymentModel = getModelForClass(Payment)
