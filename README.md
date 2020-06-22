@@ -18,7 +18,13 @@ The frontend will use ReactJS.
 
 ## Log of Events
 
-21/06/2020 - 
+22/06/2020
+
+Tasks: - JWT and Passport
+
+21/06/2020
+
+Added the Costumer Model and CRUD, added validation and sanitization, changed promises to return the error message when there is a throw.
 
 Added the Payment Model and its CRUD, also included an error and message json and a way to handle promises in different methods for GET/POST/PUT/DELETE.
 
