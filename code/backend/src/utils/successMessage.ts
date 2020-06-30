@@ -135,3 +135,31 @@ export const typeProductSuccess = {
     description: 'Type of Product updated with success'
   }
 }
+
+export const translationSuccess = {
+  6000: {
+    error: false,
+    code: 6000,
+    description: 'Translation added with success'
+  },
+  6001: {
+    error: false,
+    code: 6001,
+    description: 'Translation fetched with success'
+  },
+  6002: {
+    error: false,
+    code: 6002,
+    description: 'Translation deleted with success'
+  },
+  6003: {
+    error: false,
+    code: 6003,
+    description: 'Translation returned with success'
+  },
+  6004: {
+    error: false,
+    code: 6004,
+    description: 'Translation updated with success'
+  }
+}

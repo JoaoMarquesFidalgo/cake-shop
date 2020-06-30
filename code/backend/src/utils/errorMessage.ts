@@ -215,3 +215,46 @@ export const typeProductError = {
     description: 'Type of Product (name) already exists'
   }
 }
+
+export const translationError = {
+  6000: {
+    error: true,
+    code: 6000,
+    description: 'Couldn\'t add translation'
+  },
+  6001: {
+    error: true,
+    code: 6001,
+    description: 'Couldn\'t fetch translation'
+  },
+  6002: {
+    error: true,
+    code: 6002,
+    description: 'Couldn\'t delete translation'
+  },
+  6003: {
+    error: true,
+    code: 6003,
+    description: 'Couldn\'t return translation'
+  },
+  6004: {
+    error: true,
+    code: 6004,
+    description: 'Couldn\'t update translation'
+  },
+  6005: {
+    error: true,
+    code: 6005,
+    description: 'No values were passed to update the translation'
+  },
+  6006: {
+    error: true,
+    code: 6006,
+    description: 'Missing translation fields'
+  },
+  6007: {
+    error: true,
+    code: 6007,
+    description: 'Provide a value translation language'
+  }
+}

@@ -13,5 +13,6 @@ router.use('/payments', require('./payments'))
 router.use('/costumers', require('./costumers'))
 router.use('/zones', require('./zones'))
 router.use('/type-products', require('./type-products'))
+router.use('/translations', require('./translations'))
 
 export default router
