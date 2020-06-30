@@ -107,3 +107,31 @@ export const zoneSuccess = {
     description: 'Zone updated with success'
   }
 }
+
+export const typeProductSuccess = {
+  5000: {
+    error: false,
+    code: 5000,
+    description: 'Type of Product added with success'
+  },
+  5001: {
+    error: false,
+    code: 5001,
+    description: 'Type of Product fetched with success'
+  },
+  5002: {
+    error: false,
+    code: 5002,
+    description: 'Type of Product deleted with success'
+  },
+  5003: {
+    error: false,
+    code: 5003,
+    description: 'Type of Product returned with success'
+  },
+  5004: {
+    error: false,
+    code: 5004,
+    description: 'Type of Product updated with success'
+  }
+}

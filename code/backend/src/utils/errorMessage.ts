@@ -7,7 +7,7 @@ export const generalError = {
   801: {
     error: true,
     code: 801,
-    description: 'Please provide value information'
+    description: 'Please provide valid information'
   }
 }
 
@@ -105,11 +105,10 @@ export const costumerError = {
     code: 2010,
     description: 'Email provided in not correct'
   },
-  // TODO: Change this
   2011: {
     error: true,
     code: 2011,
-    description: 'Please provide value information'
+    description: 'Please provide valid information'
   }
 }
 
@@ -171,5 +170,48 @@ export const zoneError = {
     error: true,
     code: 4007,
     description: 'Zone already exists'
+  }
+}
+
+export const typeProductError = {
+  5000: {
+    error: true,
+    code: 5000,
+    description: 'Couldn\'t add type of Product'
+  },
+  5001: {
+    error: true,
+    code: 5001,
+    description: 'Couldn\'t fetch type of Product'
+  },
+  5002: {
+    error: true,
+    code: 5002,
+    description: 'Couldn\'t delete type of Product'
+  },
+  5003: {
+    error: true,
+    code: 5003,
+    description: 'Couldn\'t return type of Product'
+  },
+  5004: {
+    error: true,
+    code: 5004,
+    description: 'Couldn\'t update type of Product'
+  },
+  5005: {
+    error: true,
+    code: 5005,
+    description: 'No values were passed to update the type of Product'
+  },
+  5006: {
+    error: true,
+    code: 5006,
+    description: 'Missing type of Product fields'
+  },
+  5007: {
+    error: true,
+    code: 5007,
+    description: 'Type of Product (name) already exists'
   }
 }
