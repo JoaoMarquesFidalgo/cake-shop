@@ -23,7 +23,7 @@ switch (config.environment) {
 
 const connectWithMongoose = (): void => {
   const connect = () => {
-    mongoose.connect(config.mongooseUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect(config.mongooseUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
       .then(() => {
         return console.log(`Successfully connected to ${config.mongooseUrl}`)
       })

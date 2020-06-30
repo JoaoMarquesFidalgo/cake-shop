@@ -1,4 +1,10 @@
 module.exports = {
+  env: {
+    development: {
+      sourceMaps: true,
+      plugins: ['source-map-support']
+    }
+  },
   presets: [
     [
       '@babel/preset-env',
