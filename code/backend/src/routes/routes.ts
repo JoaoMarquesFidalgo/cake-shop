@@ -11,5 +11,6 @@ router.get('/failed-login', (req: Request, res: Response): void => {
 router.use('/users', require('./users'))
 router.use('/payments', require('./payments'))
 router.use('/costumers', require('./costumers'))
+router.use('/zones', require('./zones'))
 
 export default router

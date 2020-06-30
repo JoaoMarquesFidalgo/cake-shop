@@ -130,3 +130,41 @@ export const userError = {
     description: 'Email already registered'
   }
 }
+
+export const zoneError = {
+  4000: {
+    error: true,
+    code: 4000,
+    description: 'Couldn\'t add zone'
+  },
+  4001: {
+    error: true,
+    code: 4001,
+    description: 'Couldn\'t fetch zone'
+  },
+  4002: {
+    error: true,
+    code: 4002,
+    description: 'Couldn\'t delete zone'
+  },
+  4003: {
+    error: true,
+    code: 4003,
+    description: 'Couldn\'t return zone'
+  },
+  4004: {
+    error: true,
+    code: 4004,
+    description: 'Couldn\'t update zone'
+  },
+  4005: {
+    error: true,
+    code: 4005,
+    description: 'No values were passed to update the zone'
+  },
+  4006: {
+    error: true,
+    code: 4006,
+    description: 'Missing zone fields'
+  }
+}

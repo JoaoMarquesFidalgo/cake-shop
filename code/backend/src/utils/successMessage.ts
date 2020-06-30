@@ -79,3 +79,31 @@ export const authSuccess = {
     description: 'User was able to login'
   }
 }
+
+export const zoneSuccess = {
+  4000: {
+    error: false,
+    code: 4000,
+    description: 'Zone added with success'
+  },
+  4001: {
+    error: false,
+    code: 4001,
+    description: 'Zone fetched with success'
+  },
+  4002: {
+    error: false,
+    code: 4002,
+    description: 'Zone deleted with success'
+  },
+  4003: {
+    error: false,
+    code: 4003,
+    description: 'Zone returned with success'
+  },
+  4004: {
+    error: false,
+    code: 4004,
+    description: 'Zone updated with success'
+  }
+}
