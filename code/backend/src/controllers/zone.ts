@@ -18,9 +18,12 @@ async function createZoneAsync (zone: Zone): Promise<Zone> {
   if (!verifyZoneFields(zone)) {
     throw generalError['801']
   }
-
-  const { _id: id } = await ZoneModel.create(zone)
-  return await ZoneModel.findById(id).exec()
+  try {
+    const { _id: id } = await ZoneModel.create(zone)
+    return await ZoneModel.findById(id).exec()
+  } catch (err) {
+    throw zoneError['4007']
+  }
 }
 
 function getZones (req: Request, res: Response) {
@@ -80,12 +83,15 @@ async function updateOneZoneTypeAsync (id: string, zone: Zone): Promise<Zone> {
   if (!verifyZoneFields(zone)) {
     throw generalError['801']
   }
-
-  const getOneZone = await ZoneModel.findByIdAndUpdate(id, zone, { new: true }).exec()
-  if (!getOneZone) {
-    throw zoneError['4004']
+  try {
+    const getOneZone = await ZoneModel.findByIdAndUpdate(id, zone, { new: true }).exec()
+    if (!getOneZone) {
+      throw zoneError['4004']
+    }
+    return getOneZone
+  } catch (err) {
+    throw zoneError['4007']
   }
-  return getOneZone
 }
 
 function verifyZoneFields (zone: Zone): boolean {

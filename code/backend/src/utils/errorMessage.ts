@@ -166,5 +166,10 @@ export const zoneError = {
     error: true,
     code: 4006,
     description: 'Missing zone fields'
+  },
+  4007: {
+    error: true,
+    code: 4007,
+    description: 'Zone already exists'
   }
 }
