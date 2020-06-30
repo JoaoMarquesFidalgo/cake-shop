@@ -17,7 +17,7 @@ export function sanitizeValidateValue (type: typesOfValue, value: any): boolean 
       return (validator.isEmail(value)) ? validator.normalizeEmail(value) : false
 
     case typesOfValue.NUMBER:
-      return validator.isNumeric(value)
+      return validator.isNumeric(String(value))
 
     case typesOfValue.JSON:
       return validator.isJSON(value)

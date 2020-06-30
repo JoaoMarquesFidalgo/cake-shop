@@ -7,6 +7,7 @@ export function handlePostPromise (functionToCall: Function, req: Request, res: 
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
     .catch((errorMessage) => {
+      console.log(errorMessage)
       if (errorMessage) {
         return res.json(new GeneralResponse({ ...errorMessage }))
       }

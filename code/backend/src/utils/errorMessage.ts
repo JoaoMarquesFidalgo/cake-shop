@@ -316,3 +316,41 @@ export const seoError = {
     description: 'Provide a valid Seo object'
   }
 }
+
+export const discountError = {
+  8000: {
+    error: true,
+    code: 8000,
+    description: 'Couldn\'t add Discount'
+  },
+  8001: {
+    error: true,
+    code: 8001,
+    description: 'Couldn\'t fetch Discounts'
+  },
+  8002: {
+    error: true,
+    code: 8002,
+    description: 'Couldn\'t delete Discount'
+  },
+  8003: {
+    error: true,
+    code: 8003,
+    description: 'Couldn\'t return Discount'
+  },
+  8004: {
+    error: true,
+    code: 8004,
+    description: 'Couldn\'t update Discount'
+  },
+  8005: {
+    error: true,
+    code: 8005,
+    description: 'Provide a valid Discount object'
+  },
+  8006: {
+    error: true,
+    code: 8006,
+    description: 'Discount already registered'
+  }
+}

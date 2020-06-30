@@ -15,5 +15,6 @@ router.use('/zones', require('./zones'))
 router.use('/type-products', require('./type-products'))
 router.use('/translations', require('./translations'))
 router.use('/seos', require('./seos'))
+router.use('/discounts', require('./discounts'))
 
 export default router

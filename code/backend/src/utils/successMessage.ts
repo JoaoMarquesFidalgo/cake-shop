@@ -191,3 +191,31 @@ export const seoSuccess = {
     description: 'Seo updated with success'
   }
 }
+
+export const discountSuccess = {
+  8000: {
+    error: false,
+    code: 8000,
+    description: 'Discount added with success'
+  },
+  8001: {
+    error: false,
+    code: 8001,
+    description: 'Discount fetched with success'
+  },
+  8002: {
+    error: false,
+    code: 8002,
+    description: 'Discount deleted with success'
+  },
+  8003: {
+    error: false,
+    code: 8003,
+    description: 'Discount returned with success'
+  },
+  8004: {
+    error: false,
+    code: 8004,
+    description: 'Discount updated with success'
+  }
+}
