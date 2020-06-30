@@ -112,3 +112,21 @@ export const costumerError = {
     description: 'Please provide value information'
   }
 }
+
+export const userError = {
+  3000: {
+    error: true,
+    code: 3000,
+    description: 'Please provide username and password'
+  },
+  3001: {
+    error: true,
+    code: 3001,
+    description: 'Wrong credentials'
+  },
+  3002: {
+    error: true,
+    code: 3002,
+    description: 'Email already registered'
+  }
+}

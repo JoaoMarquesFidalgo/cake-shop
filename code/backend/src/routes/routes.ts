@@ -39,4 +39,13 @@ routes.put('/costumer/:id', (req: Request, res: Response) => {
   return updateOnePayment(req, res)
 })
 
+// Authentication routes
+
+routes.get('/failed-login', (req: Request, res: Response): void => {
+  res.status(200).json({ success: true, msg: 'Failed to login!' })
+})
+
+// Use the routes defined in `./users.js` for all activity to http://localhost:3000/users/
+routes.use('/users', require('./users'))
+
 export default routes

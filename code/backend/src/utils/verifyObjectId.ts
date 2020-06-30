@@ -1,4 +1,4 @@
-import { typesOfValue } from 'src/enum/typesValues'
+import { typesOfValue } from '@enum/typesValues'
 import { sanitizeValidateValue } from './sanitizeValues'
 
 export function verifyObjectId (id: string): boolean | string {

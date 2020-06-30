@@ -21,7 +21,10 @@
             "@views/*": ["./src/views/*"],
             "@config/*": ["./src/config/*"],
             "@services/*": ["./src/services/*"],
-            "@utils/*": ["./src/utils/*"]
+            "@utils/*": ["./src/utils/*"],
+            "@routes/*": ["./src/routes/*"],
+            "@auth/*": ["./src/auth/*"],
+            "@enum/*": ["./src/enum/*"]
         },
         "sourceMap": true,
         "outDir": "./dist",

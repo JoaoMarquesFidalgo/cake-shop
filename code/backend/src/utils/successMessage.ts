@@ -53,3 +53,29 @@ export const costumerSuccess = {
     description: 'Costumer updated with success'
   }
 }
+
+export const userSuccess = {
+  3000: {
+    error: false,
+    code: 3000,
+    description: 'User was registered with success'
+  },
+  3001: {
+    error: false,
+    code: 3001,
+    description: 'User was able to login'
+  }
+}
+
+export const authSuccess = {
+  4000: {
+    error: false,
+    code: 4000,
+    description: 'User authenticated with success'
+  },
+  4001: {
+    error: false,
+    code: 4001,
+    description: 'User was able to login'
+  }
+}

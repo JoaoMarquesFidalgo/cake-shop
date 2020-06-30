@@ -1,4 +1,4 @@
-import { costumerError, generalError } from './../utils/errorMessage'
+import { costumerError, generalError } from '@utils/errorMessage'
 import { Request, Response } from 'express'
 import { CostumerModel, Costumer } from '@models/Costumer'
 import { costumerSuccess } from '@utils/successMessage'

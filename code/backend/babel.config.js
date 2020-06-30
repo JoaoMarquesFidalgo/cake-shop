@@ -25,7 +25,10 @@ module.exports = {
         '@models': './src/models',
         '@controllers': './src/controllers',
         '@services': './src/services',
-        '@utils': './src/utils'
+        '@utils': './src/utils',
+        '@routes': './src/routes',
+        '@auth': './src/auth',
+        '@enum': './src/enum'
       }
     }]
   ],

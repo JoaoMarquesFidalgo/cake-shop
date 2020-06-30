@@ -4,7 +4,7 @@ export class GeneralResponse {
   description: string
   data: Object
 
-  constructor (data?, ...object) {
+  constructor (data?: Object, ...object: any) {
     if (data) {
       this.data = data
     }

@@ -1,5 +1,5 @@
 import validator from 'validator'
-import { typesOfValue } from 'src/enum/typesValues'
+import { typesOfValue } from '@enum/typesValues'
 
 export function sanitizeValidateValue (type: typesOfValue, value: any): boolean | string {
   switch (type) {
