@@ -46,6 +46,11 @@ export const paymentError = {
     error: true,
     code: 1006,
     description: 'Missing payment fields'
+  },
+  1007: {
+    error: true,
+    code: 1007,
+    description: 'Please provide valid Payment object'
   }
 }
 
@@ -213,6 +218,11 @@ export const typeProductError = {
     error: true,
     code: 5007,
     description: 'Type of Product (name) already exists'
+  },
+  5008: {
+    error: true,
+    code: 5008,
+    description: 'Type of Product fields are incorrect'
   }
 }
 
@@ -220,42 +230,47 @@ export const translationError = {
   6000: {
     error: true,
     code: 6000,
-    description: 'Couldn\'t add translation'
+    description: 'Couldn\'t add Translation'
   },
   6001: {
     error: true,
     code: 6001,
-    description: 'Couldn\'t fetch translation'
+    description: 'Couldn\'t fetch Translation'
   },
   6002: {
     error: true,
     code: 6002,
-    description: 'Couldn\'t delete translation'
+    description: 'Couldn\'t delete Translation'
   },
   6003: {
     error: true,
     code: 6003,
-    description: 'Couldn\'t return translation'
+    description: 'Couldn\'t return Translation'
   },
   6004: {
     error: true,
     code: 6004,
-    description: 'Couldn\'t update translation'
+    description: 'Couldn\'t update Translation'
   },
   6005: {
     error: true,
     code: 6005,
-    description: 'No values were passed to update the translation'
+    description: 'No values were passed to update the Translation'
   },
   6006: {
     error: true,
     code: 6006,
-    description: 'Missing translation fields'
+    description: 'Missing Translation fields'
   },
   6007: {
     error: true,
     code: 6007,
-    description: 'Provide a valid translation language'
+    description: 'Provide a valid Translation language'
+  },
+  6008: {
+    error: true,
+    code: 6008,
+    description: 'Provide a valid Translation object'
   }
 }
 

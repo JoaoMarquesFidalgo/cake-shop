@@ -15,10 +15,13 @@ async function createPaymentAsync (payment: Payment): Promise<Payment> {
   if (!payment.paymentMethod || !payment.paymentStatus || !payment.deliveryStatus) {
     throw paymentError['1006']
   }
-  if (!verifyPaymentFields(payment)) {
+  const verifiedPayment: Payment = verifyPaymentFields(payment)
+  if (!verifiedPayment) {
     throw generalError['801']
   }
-
+  payment.deliveryStatus = verifiedPayment.deliveryStatus
+  payment.paymentMethod = verifiedPayment.paymentMethod
+  payment.paymentStatus = verifiedPayment.paymentStatus
   const { _id: id } = await PaymentModel.create(payment)
   return await PaymentModel.findById(id).exec()
 }
@@ -77,9 +80,13 @@ async function updateOnePaymentTypeAsync (id: string, payment: Payment): Promise
   if (!payment.paymentMethod || !payment.paymentStatus || !payment.deliveryStatus) {
     throw paymentError['1006']
   }
-  if (!verifyPaymentFields(payment)) {
+  const verifiedPayment: Payment = verifyPaymentFields(payment)
+  if (!verifiedPayment) {
     throw generalError['801']
   }
+  payment.deliveryStatus = verifiedPayment.deliveryStatus
+  payment.paymentMethod = verifiedPayment.paymentMethod
+  payment.paymentStatus = verifiedPayment.paymentStatus
 
   const getOnePayment = await PaymentModel.findByIdAndUpdate(id, payment, { new: true }).exec()
   if (!getOnePayment) {
@@ -88,14 +95,17 @@ async function updateOnePaymentTypeAsync (id: string, payment: Payment): Promise
   return getOnePayment
 }
 
-function verifyPaymentFields (payment: Payment): boolean {
+function verifyPaymentFields (payment: Payment): Payment {
   const validDS = sanitizeValidateValue(typesOfValue.WORD, payment.deliveryStatus)
-  if (!validDS) return false
+  if (!validDS) throw paymentError['1007']
+  payment.deliveryStatus = String(validDS)
   const validPM = sanitizeValidateValue(typesOfValue.WORD, payment.paymentMethod)
-  if (!validPM) return false
+  if (!validPM) throw paymentError['1007']
+  payment.paymentMethod = String(validPM)
   const validPS = sanitizeValidateValue(typesOfValue.WORD, payment.paymentStatus)
-  if (!validPS) return false
-  return true
+  if (!validPS) throw paymentError['1007']
+  payment.paymentStatus = String(validPS)
+  return payment
 }
 
 export { addPayment, getPayments, deletePayment, getOnePayment, updateOnePayment }

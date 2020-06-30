@@ -16,10 +16,12 @@ async function createTranslationAsync (translation: Translation): Promise<Transl
   if (!translation.language || !translation.value) {
     throw translationError['6006']
   }
-  if (!verifyTranslationFields(translation)) {
+  const verifiedTranslation: Translation = verifyTranslationFields(translation)
+  if (!verifiedTranslation) {
     throw generalError['801']
   }
   try {
+    translation.value = verifiedTranslation.value
     const { _id: id } = await TranslationModel.create(translation)
     return await TranslationModel.findById(id).exec()
   } catch (err) {
@@ -81,29 +83,27 @@ async function updateOneTranslationTypeAsync (id: string, translation: Translati
   if (!translation.language || !translation.value) {
     throw translationError['6006']
   }
-  if (!verifyTranslationFields(translation)) {
+  const verifiedTranslation: Translation = verifyTranslationFields(translation)
+  if (!verifiedTranslation) {
     throw generalError['801']
   }
-  try {
-    const getOneTranslation = await TranslationModel.findByIdAndUpdate(id, translation, { new: true }).exec()
-    if (!getOneTranslation) {
-      throw translationError['6004']
-    }
-    return getOneTranslation
-  } catch (err) {
-    throw translationError['6006']
+
+  translation.value = verifiedTranslation.value
+  const getOneTranslation = await TranslationModel.findByIdAndUpdate(id, translation, { new: true }).exec()
+  if (!getOneTranslation) {
+    throw translationError['6004']
   }
+  return getOneTranslation
 }
 
-function verifyTranslationFields (translation: Translation): boolean {
-  const validLanguage = sanitizeValidateValue(typesOfValue.WORD, translation.language)
-  if (!validLanguage) return false
-  if (validLanguage !== languages.PT && validLanguage !== languages.EN && validLanguage !== languages.ESP) {
+function verifyTranslationFields (translation: Translation): Translation {
+  if (translation.language !== languages.PT && translation.language !== languages.EN && translation.language !== languages.ESP) {
     throw translationError['6007']
   }
   const validValue = sanitizeValidateValue(typesOfValue.WORD, translation.value)
-  if (!validValue) return false
-  return true
+  if (!validValue) throw translationError['6008']
+  translation.value = String(validValue)
+  return translation
 }
 
 export { addTranslation, getTranslations, deleteTranslation, getOneTranslation, updateOneTranslation }

@@ -15,10 +15,12 @@ async function createZoneAsync (zone: Zone): Promise<Zone> {
   if (!zone.name) {
     throw zoneError['4006']
   }
-  if (!verifyZoneFields(zone)) {
+  const zoneVerified: Zone = verifyZoneFields(zone)
+  if (!zoneVerified) {
     throw generalError['801']
   }
   try {
+    zone.name = zoneVerified.name
     const { _id: id } = await ZoneModel.create(zone)
     return await ZoneModel.findById(id).exec()
   } catch (err) {
@@ -80,10 +82,12 @@ async function updateOneZoneTypeAsync (id: string, zone: Zone): Promise<Zone> {
   if (!zone.name) {
     throw zoneError['4006']
   }
-  if (!verifyZoneFields(zone)) {
+  const zoneVerified: Zone = verifyZoneFields(zone)
+  if (!zoneVerified) {
     throw generalError['801']
   }
   try {
+    zone.name = zoneVerified.name
     const getOneZone = await ZoneModel.findByIdAndUpdate(id, zone, { new: true }).exec()
     if (!getOneZone) {
       throw zoneError['4004']
@@ -94,12 +98,11 @@ async function updateOneZoneTypeAsync (id: string, zone: Zone): Promise<Zone> {
   }
 }
 
-function verifyZoneFields (zone: Zone): boolean {
-  const validJSON = sanitizeValidateValue(typesOfValue.JSON, JSON.stringify(zone))
-  if (!validJSON) return false
-  const validName = sanitizeValidateValue(typesOfValue.WORD, zone.name)
-  if (!validName) return false
-  return true
+function verifyZoneFields (zone: Zone): Zone {
+  const validZoneName = sanitizeValidateValue(typesOfValue.WORD, zone.name)
+  if (!validZoneName) throw zoneError['4006']
+  zone.name = String(validZoneName)
+  return zone
 }
 
 export { addZone, getZones, deleteZone, getOneZone, updateOneZone }

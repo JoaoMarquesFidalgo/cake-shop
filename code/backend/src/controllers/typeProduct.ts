@@ -15,11 +15,15 @@ async function createTypeProductAsync (typeProduct: TypeProduct): Promise<TypePr
   if (!typeProduct.name || typeProduct.googleTaxo === undefined || typeProduct.googleTaxo.length === 0) {
     throw typeProductError['5006']
   }
-  if (!verifyTypeProductFields(typeProduct)) {
+  const validTypeProduct: TypeProduct = verifyTypeProductFields(typeProduct)
+  if (!validTypeProduct) {
     throw generalError['801']
   }
 
   try {
+    typeProduct.name = validTypeProduct.name
+    typeProduct.googleTaxo = validTypeProduct.googleTaxo
+
     const { _id: id } = await TypeProductModel.create(typeProduct)
     return await TypeProductModel.findById(id).exec()
   } catch (err) {
@@ -81,10 +85,13 @@ async function updateOneTypeProductTypeAsync (id: string, typeProduct: TypeProdu
   if (!typeProduct.name || typeProduct.googleTaxo === undefined || typeProduct.googleTaxo.length === 0) {
     throw typeProductError['5006']
   }
-  if (!verifyTypeProductFields(typeProduct)) {
+  const validTypeProduct: TypeProduct = verifyTypeProductFields(typeProduct)
+  if (!validTypeProduct) {
     throw generalError['801']
   }
   try {
+    typeProduct.name = validTypeProduct.name
+    typeProduct.googleTaxo = validTypeProduct.googleTaxo
     const getOneTypeProduct = await TypeProductModel.findByIdAndUpdate(id, typeProduct, { new: true }).exec()
     if (!getOneTypeProduct) {
       throw typeProductError['5004']
@@ -95,13 +102,16 @@ async function updateOneTypeProductTypeAsync (id: string, typeProduct: TypeProdu
   }
 }
 
-function verifyTypeProductFields (typeProduct: TypeProduct): boolean {
-  const validDS = sanitizeValidateValue(typesOfValue.WORD, typeProduct.name)
-  if (!validDS) return false
-  for (const googleTaxo of typeProduct.googleTaxo) {
-    if (!sanitizeValidateValue(typesOfValue.WORD, googleTaxo)) return false
+function verifyTypeProductFields (typeProduct: TypeProduct): TypeProduct {
+  const validName = sanitizeValidateValue(typesOfValue.WORD, typeProduct.name)
+  if (!validName) throw typeProductError['5008']
+  typeProduct.name = String(validName)
+  for (let googleTaxo of typeProduct.googleTaxo) {
+    const validGoogleTaxo = sanitizeValidateValue(typesOfValue.WORD, googleTaxo)
+    if (!validGoogleTaxo) throw typeProductError['5008']
+    googleTaxo = String(validGoogleTaxo)
   }
-  return true
+  return typeProduct
 }
 
 export { addTypeProduct, getTypeProducts, deleteTypeProduct, getOneTypeProduct, updateOneTypeProduct }
