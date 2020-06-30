@@ -18,9 +18,11 @@ The frontend will use ReactJS.
 
 ## Log of Events
 
-22/06/2020
+22/06/2020 - 30/06/2020
 
-Tasks: - JWT and Passport
+Added Passport + JWT and Passport-Facebook authentication with an index.html file to test the routes. 
+
+From now, each POST/PUT/DELETE route should go thru the Passport middleware. Later, routes only accessible to managers or content creators should pass thru a specific route.
 
 21/06/2020
 
