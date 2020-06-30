@@ -255,6 +255,49 @@ export const translationError = {
   6007: {
     error: true,
     code: 6007,
-    description: 'Provide a value translation language'
+    description: 'Provide a valid translation language'
+  }
+}
+
+export const seoError = {
+  7000: {
+    error: true,
+    code: 7000,
+    description: 'Couldn\'t add Seo'
+  },
+  7001: {
+    error: true,
+    code: 7001,
+    description: 'Couldn\'t fetch Seo'
+  },
+  7002: {
+    error: true,
+    code: 7002,
+    description: 'Couldn\'t delete Seo'
+  },
+  7003: {
+    error: true,
+    code: 7003,
+    description: 'Couldn\'t return Seo'
+  },
+  7004: {
+    error: true,
+    code: 7004,
+    description: 'Couldn\'t update Seo'
+  },
+  7005: {
+    error: true,
+    code: 7005,
+    description: 'No values were passed to update the Seo'
+  },
+  7006: {
+    error: true,
+    code: 7006,
+    description: 'Missing Seo fields'
+  },
+  7007: {
+    error: true,
+    code: 7007,
+    description: 'Provide a valid Seo object'
   }
 }

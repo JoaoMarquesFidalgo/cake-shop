@@ -163,3 +163,31 @@ export const translationSuccess = {
     description: 'Translation updated with success'
   }
 }
+
+export const seoSuccess = {
+  7000: {
+    error: false,
+    code: 7000,
+    description: 'Seo added with success'
+  },
+  7001: {
+    error: false,
+    code: 7001,
+    description: 'Seo fetched with success'
+  },
+  7002: {
+    error: false,
+    code: 7002,
+    description: 'Seo deleted with success'
+  },
+  7003: {
+    error: false,
+    code: 7003,
+    description: 'Seo returned with success'
+  },
+  7004: {
+    error: false,
+    code: 7004,
+    description: 'Seo updated with success'
+  }
+}
