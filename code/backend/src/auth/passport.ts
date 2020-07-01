@@ -87,7 +87,6 @@ module.exports =
       if (err) {
         return done(err, false)
       }
-      console.log(user)
       if (user && user.facebookId) {
         // Since we are here, the JWT is valid and our user is valid, so we are authorized!
         return done(null, user)

@@ -6,6 +6,7 @@ import { zoneSuccess } from '@utils/successMessage'
 import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
 import { verifyObjectId } from '@utils/verifyObjectId'
 import { sanitizeValidateValue } from '@utils/sanitizeValues'
+import { ObjectId } from 'mongodb'
 
 function addZone (req: Request, res: Response): void {
   handlePostPromise(createZoneAsync, req, res, zoneSuccess['4000'], zoneError['4000'], Zone)
@@ -20,6 +21,7 @@ async function createZoneAsync (zone: Zone): Promise<Zone> {
     throw generalError['801']
   }
   try {
+    zone._id = new ObjectId()
     zone.name = zoneVerified.name
     const { _id: id } = await ZoneModel.create(zone)
     return await ZoneModel.findById(id).exec()
@@ -105,4 +107,4 @@ function verifyZoneFields (zone: Zone): Zone {
   return zone
 }
 
-export { addZone, getZones, deleteZone, getOneZone, updateOneZone }
+export { addZone, getZones, deleteZone, getOneZone, updateOneZone, verifyZoneFields, createZoneAsync, getZonesAsync }

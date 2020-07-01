@@ -13,6 +13,15 @@ export function sanitizeValidateValue (type: typesOfValue, value: any): boolean 
         return false
       }
       return validator.escape(value)
+    case typesOfValue.WORD_NO_ESCAPE:
+      value = '' + value
+      if (validator.isEmpty(value)) {
+        return false
+      }
+      if (!validator.isLength(value, { min: 2, max: undefined })) {
+        return false
+      }
+      return true
     case typesOfValue.EMAIL:
       return (validator.isEmail(value)) ? validator.normalizeEmail(value) : false
 

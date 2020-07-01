@@ -6,6 +6,7 @@ import { discountSuccess } from '@utils/successMessage'
 import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
 import { verifyObjectId } from '@utils/verifyObjectId'
 import { sanitizeValidateValue } from '@utils/sanitizeValues'
+import { ObjectId } from 'mongodb'
 
 function addDiscount (req: Request, res: Response): void {
   handlePostPromise(createDiscountAsync, req, res, discountSuccess['8000'], discountError['8000'], Discount)
@@ -19,6 +20,7 @@ async function createDiscountAsync (discount: Discount): Promise<Discount> {
     throw generalError['801']
   }
   try {
+    discount._id = new ObjectId()
     const { _id: id } = await DiscountModel.create(discount)
     return await DiscountModel.findById(id).exec()
   } catch (err) {
@@ -98,4 +100,4 @@ function verifyDiscountFields (discount: Discount): Boolean {
   return Boolean(sanitizeValidateValue(typesOfValue.NUMBER, discount.value))
 }
 
-export { addDiscount, getDiscounts, deleteDiscount, getOneDiscount, updateOneDiscount }
+export { addDiscount, getDiscounts, deleteDiscount, getOneDiscount, updateOneDiscount, verifyDiscountFields, createDiscountAsync, getDiscountsAsync }

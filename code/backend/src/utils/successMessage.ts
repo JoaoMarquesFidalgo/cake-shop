@@ -219,3 +219,31 @@ export const discountSuccess = {
     description: 'Discount updated with success'
   }
 }
+
+export const productSuccess = {
+  9000: {
+    error: false,
+    code: 9000,
+    description: 'Product added with success'
+  },
+  9001: {
+    error: false,
+    code: 9001,
+    description: 'Product fetched with success'
+  },
+  9002: {
+    error: false,
+    code: 9002,
+    description: 'Product deleted with success'
+  },
+  9003: {
+    error: false,
+    code: 9003,
+    description: 'Product returned with success'
+  },
+  9004: {
+    error: false,
+    code: 9004,
+    description: 'Product updated with success'
+  }
+}

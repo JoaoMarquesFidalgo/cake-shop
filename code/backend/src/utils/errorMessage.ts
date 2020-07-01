@@ -354,3 +354,46 @@ export const discountError = {
     description: 'Discount already registered'
   }
 }
+
+export const productError = {
+  9000: {
+    error: true,
+    code: 9000,
+    description: 'Couldn\'t add Product'
+  },
+  9001: {
+    error: true,
+    code: 9001,
+    description: 'Couldn\'t fetch Products'
+  },
+  9002: {
+    error: true,
+    code: 9002,
+    description: 'Couldn\'t delete Product'
+  },
+  9003: {
+    error: true,
+    code: 9003,
+    description: 'Couldn\'t return Product'
+  },
+  9004: {
+    error: true,
+    code: 9004,
+    description: 'Couldn\'t update Product'
+  },
+  9005: {
+    error: true,
+    code: 9005,
+    description: 'Provide a valid Product object'
+  },
+  9006: {
+    error: true,
+    code: 9006,
+    description: 'Product already registered'
+  },
+  9007: {
+    error: true,
+    code: 9007,
+    description: 'Product fields are missing. Name, stock and price.'
+  }
+}

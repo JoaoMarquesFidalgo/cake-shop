@@ -6,6 +6,7 @@ import { typeProductSuccess } from '@utils/successMessage'
 import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
 import { verifyObjectId } from '@utils/verifyObjectId'
 import { sanitizeValidateValue } from '@utils/sanitizeValues'
+import { ObjectId } from 'mongodb'
 
 function addTypeProduct (req: Request, res: Response): void {
   handlePostPromise(createTypeProductAsync, req, res, typeProductSuccess['5000'], typeProductError['5000'], TypeProduct)
@@ -23,7 +24,7 @@ async function createTypeProductAsync (typeProduct: TypeProduct): Promise<TypePr
   try {
     typeProduct.name = validTypeProduct.name
     typeProduct.googleTaxo = validTypeProduct.googleTaxo
-
+    typeProduct._id = new ObjectId()
     const { _id: id } = await TypeProductModel.create(typeProduct)
     return await TypeProductModel.findById(id).exec()
   } catch (err) {
@@ -114,4 +115,4 @@ function verifyTypeProductFields (typeProduct: TypeProduct): TypeProduct {
   return typeProduct
 }
 
-export { addTypeProduct, getTypeProducts, deleteTypeProduct, getOneTypeProduct, updateOneTypeProduct }
+export { addTypeProduct, getTypeProducts, deleteTypeProduct, getOneTypeProduct, updateOneTypeProduct, verifyTypeProductFields, createTypeProductAsync, getTypeProductsAsync }

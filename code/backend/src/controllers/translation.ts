@@ -7,6 +7,7 @@ import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOneP
 import { verifyObjectId } from '@utils/verifyObjectId'
 import { sanitizeValidateValue } from '@utils/sanitizeValues'
 import { languages } from '@enum/languages'
+import { ObjectId } from 'mongodb'
 
 function addTranslation (req: Request, res: Response): void {
   handlePostPromise(createTranslationAsync, req, res, translationSuccess['6000'], translationError['6000'], Translation)
@@ -21,6 +22,7 @@ async function createTranslationAsync (translation: Translation): Promise<Transl
     throw generalError['801']
   }
   try {
+    translation._id = new ObjectId()
     translation.value = verifiedTranslation.value
     const { _id: id } = await TranslationModel.create(translation)
     return await TranslationModel.findById(id).exec()
@@ -106,4 +108,4 @@ function verifyTranslationFields (translation: Translation): Translation {
   return translation
 }
 
-export { addTranslation, getTranslations, deleteTranslation, getOneTranslation, updateOneTranslation }
+export { addTranslation, getTranslations, deleteTranslation, getOneTranslation, updateOneTranslation, verifyTranslationFields, createTranslationAsync }

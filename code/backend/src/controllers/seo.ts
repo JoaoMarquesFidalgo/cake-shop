@@ -6,6 +6,7 @@ import { seoSuccess } from '@utils/successMessage'
 import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
 import { verifyObjectId } from '@utils/verifyObjectId'
 import { sanitizeValidateValue } from '@utils/sanitizeValues'
+import { ObjectId } from 'mongodb'
 
 function addSeo (req: Request, res: Response): void {
   handlePostPromise(createSeoAsync, req, res, seoSuccess['7000'], seoError['7000'], Seo)
@@ -20,6 +21,7 @@ async function createSeoAsync (seo: Seo): Promise<Seo> {
     throw generalError['801']
   }
   try {
+    seo._id = new ObjectId()
     seo.seoTitle = seoVerified.seoTitle
     seo.seoDescription = seoVerified.seoDescription
     const { _id: id } = await SeoModel.create(seo)
@@ -107,4 +109,4 @@ function verifySeoFields (seo: Seo): Seo {
   return seo
 }
 
-export { addSeo, getSeos, deleteSeo, getOneSeo, updateOneSeo }
+export { addSeo, getSeos, deleteSeo, getOneSeo, updateOneSeo, verifySeoFields, createSeoAsync }
