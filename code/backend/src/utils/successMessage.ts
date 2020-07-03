@@ -247,3 +247,41 @@ export const productSuccess = {
     description: 'Product updated with success'
   }
 }
+
+export const shoppingCartSuccess = {
+  10000: {
+    error: false,
+    code: 10000,
+    description: 'Shopping Cart added with success'
+  },
+  10001: {
+    error: false,
+    code: 10001,
+    description: 'Shopping Cart fetched with success'
+  },
+  10002: {
+    error: false,
+    code: 10002,
+    description: 'Shopping Cart deleted with success'
+  },
+  10003: {
+    error: false,
+    code: 10003,
+    description: 'Shopping Cart returned with success'
+  },
+  10004: {
+    error: false,
+    code: 10004,
+    description: 'Shopping Cart updated with success'
+  },
+  10005: {
+    error: false,
+    code: 10005,
+    description: 'Product was added to Shopping Cart'
+  },
+  10006: {
+    error: false,
+    code: 10006,
+    description: 'Product was removed from Shopping Cart'
+  }
+}

@@ -397,3 +397,41 @@ export const productError = {
     description: 'Product fields are missing. Name, stock and price.'
   }
 }
+
+export const shoppingCartError = {
+  10000: {
+    error: true,
+    code: 10000,
+    description: 'Couldn\'t add Shopping Cart'
+  },
+  10001: {
+    error: true,
+    code: 10001,
+    description: 'Couldn\'t fetch Shopping Carts'
+  },
+  10002: {
+    error: true,
+    code: 10002,
+    description: 'Couldn\'t delete Shopping Cart'
+  },
+  10003: {
+    error: true,
+    code: 10003,
+    description: 'Couldn\'t return Shopping Cart'
+  },
+  10004: {
+    error: true,
+    code: 10004,
+    description: 'Couldn\'t update Shopping Cart'
+  },
+  10005: {
+    error: true,
+    code: 10005,
+    description: 'Provide a valid Shopping Cart object'
+  },
+  10006: {
+    error: true,
+    code: 10006,
+    description: 'Missing Shopping Cart fields. Products, Costumer and Payment'
+  }
+}

@@ -108,4 +108,4 @@ function verifyPaymentFields (payment: Payment): Payment {
   return payment
 }
 
-export { addPayment, getPayments, deletePayment, getOnePayment, updateOnePayment }
+export { addPayment, getPayments, deletePayment, getOnePayment, updateOnePayment, verifyPaymentFields }
