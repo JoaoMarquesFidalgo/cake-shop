@@ -30,6 +30,9 @@ export class User {
 
   @prop()
   public updatedAt?: Date;
+
+  @prop()
+  public active?: boolean;
 }
 /*
 const options: IModelOptions = {

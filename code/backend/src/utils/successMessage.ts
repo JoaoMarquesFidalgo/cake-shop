@@ -64,19 +64,36 @@ export const userSuccess = {
     error: false,
     code: 3001,
     description: 'User was able to login'
-  }
-}
-
-export const authSuccess = {
-  4000: {
+  },
+  3002: {
     error: false,
-    code: 4000,
+    code: 3002,
     description: 'User authenticated with success'
   },
-  4001: {
+  3003: {
     error: false,
-    code: 4001,
-    description: 'User was able to login'
+    code: 3003,
+    description: 'User added with success'
+  },
+  3004: {
+    error: false,
+    code: 3004,
+    description: 'All active Users fetched with success'
+  },
+  3005: {
+    error: false,
+    code: 3005,
+    description: 'User disabled with success'
+  },
+  3006: {
+    error: false,
+    code: 3006,
+    description: 'User returned with success'
+  },
+  3007: {
+    error: false,
+    code: 3007,
+    description: 'User updated with success'
   }
 }
 

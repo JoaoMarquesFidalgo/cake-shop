@@ -53,42 +53,41 @@ export const paymentError = {
     description: 'Please provide valid Payment object'
   }
 }
-
-export const costumerError = {
+export const userError = {
   2000: {
     error: true,
     code: 2000,
-    description: 'Couldn\'t add costumer'
+    description: 'Couldn\'t add User'
   },
   2001: {
     error: true,
     code: 2001,
-    description: 'Couldn\'t fetch costumer'
+    description: 'Couldn\'t fetch User'
   },
   2002: {
     error: true,
     code: 2002,
-    description: 'Couldn\'t disable costumer'
+    description: 'Couldn\'t disable User'
   },
   2003: {
     error: true,
     code: 2003,
-    description: 'Couldn\'t return costumer'
+    description: 'Couldn\'t return User'
   },
   2004: {
     error: true,
     code: 2004,
-    description: 'Couldn\'t update costumer'
+    description: 'Couldn\'t update User'
   },
   2005: {
     error: true,
     code: 2005,
-    description: 'No values were passed to update the costumer'
+    description: 'No values were passed to update the User'
   },
   2006: {
     error: true,
     code: 2006,
-    description: 'Missing costumer fields'
+    description: 'Missing User fields'
   },
   2007: {
     error: true,
@@ -114,10 +113,7 @@ export const costumerError = {
     error: true,
     code: 2011,
     description: 'Please provide valid information'
-  }
-}
-
-export const userError = {
+  },
   3000: {
     error: true,
     code: 3000,

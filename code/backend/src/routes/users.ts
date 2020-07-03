@@ -1,5 +1,5 @@
-import { authSuccess } from './../utils/successMessage'
-import { GeneralResponse } from './../models/GeneralResponse'
+import { userSuccess } from '@utils/successMessage'
+import { GeneralResponse } from '@models/GeneralResponse'
 import passport from 'passport'
 import { Request, Response } from 'express'
 import * as UserController from '@controllers/user'
@@ -23,7 +23,7 @@ router.get('/protected', passport.authenticate('authentication-needed', { sessio
     const objectToSend = {
       error: false,
       code: 4000,
-      description: authSuccess['4000'].description
+      description: userSuccess['3002'].description
     }
     res.status(200).json(new GeneralResponse(objectToSend))
   })
@@ -55,6 +55,20 @@ router.get('/facebook', function (req: Request, res: Response): void {
 // https://localhost:3000/users/facebook-route
 router.get('/facebook-route', passport.authenticate('facebook-authentication-needed'), function (req: Request, res: Response): void {
   res.status(200).json({ success: true, msg: 'You have access to facebook route!' })
+})
+
+// User router
+router.get('/', (req: Request, res: Response) => {
+  return UserController.getUsers(req, res)
+})
+router.delete('/:id', (req: Request, res: Response) => {
+  return UserController.disableUser(req, res)
+})
+router.get('/:id', (req: Request, res: Response) => {
+  return UserController.getOneUser(req, res)
+})
+router.put('/:id', (req: Request, res: Response) => {
+  return UserController.updateOneUser(req, res)
 })
 
 module.exports = router
