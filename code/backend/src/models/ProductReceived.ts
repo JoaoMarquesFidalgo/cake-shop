@@ -48,6 +48,9 @@ export class ProductReceived extends TimeStamps {
 
   @prop()
   public newDoc?: boolean;
+
+  @prop()
+  public tax: number;
 }
 
 export const ProductReceivedModel = getModelForClass(ProductReceived)

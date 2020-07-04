@@ -35,6 +35,9 @@ export class Product extends TimeStamps {
   public price: number;
 
   @prop()
+  public tax: number;
+
+  @prop()
   public weight?: number;
 
   @prop({ ref: Discount, default: undefined })

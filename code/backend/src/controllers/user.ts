@@ -139,4 +139,4 @@ function verifyUserFields (user: User): User {
   return user
 }
 
-export { authenticateUser, registerUser, getUsers, disableUser, getOneUser, updateOneUser }
+export { authenticateUser, registerUser, getUsers, disableUser, getOneUser, updateOneUser, verifyUserFields }

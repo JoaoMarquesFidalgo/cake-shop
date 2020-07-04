@@ -1,3 +1,4 @@
+import { ProductReceived } from './ProductReceived'
 import { User } from './User'
 import { Discount } from './Discount'
 import { Payment } from './Payment'
@@ -7,7 +8,7 @@ import { Product } from './Product'
 
 export class ShoppingCart extends TimeStamps {
   @prop()
-  public tax?: number;
+  public discounted?: number;
 
   @prop()
   public subtotal?: number;
@@ -16,19 +17,31 @@ export class ShoppingCart extends TimeStamps {
   public total?: number;
 
   @prop()
-  public payment: Ref<Payment>;
-
-  @prop()
   public comments?: string[];
 
-  @prop()
-  public costumer: Ref<User>;
+  @prop({ ref: User, default: undefined })
+  public userRef?: Ref<User>;
 
   @prop()
-  public discount?: Ref<Discount>;
+  public userFull?: User;
+
+  @prop({ ref: Discount, default: undefined })
+  public discountRef?: Ref<Discount>;
 
   @prop()
-  public products: Ref<Product>[];
+  public discountFull?: Discount;
+
+  @prop({ ref: Product, default: undefined })
+  public productsRef?: Ref<Product>[];
+
+  @prop()
+  public productsFull?: ProductReceived[];
+
+  @prop({ ref: Payment, default: undefined })
+  public paymentRef?: Ref<Payment>;
+
+  @prop()
+  public paymentFull?: Payment;
 }
 
 export const ShoppingCartModel = getModelForClass(ShoppingCart)

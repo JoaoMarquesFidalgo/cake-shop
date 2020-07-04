@@ -1,3 +1,4 @@
+import { ProductReceived } from './../models/ProductReceived'
 import { typesOfValue } from 'src/enum/typesValues'
 import { shoppingCartError, generalError } from '@utils/errorMessage'
 import { Request, Response } from 'express'
@@ -5,31 +6,64 @@ import { ShoppingCartModel, ShoppingCart } from '@models/ShoppingCart'
 import { shoppingCartSuccess } from '@utils/successMessage'
 import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
 import { verifyObjectId } from '@utils/verifyObjectId'
-import { sanitizeValidateValue } from '@utils/sanitizeValues'
-import { ObjectId } from 'mongodb'
-import { ShoppingCartReceived } from '@models/ShoppingCartReceived'
+
 import { verifyPaymentFields } from '@controllers/payment'
-import { verifyCostumerFields } from '@controllers/costumer'
+import { verifyUserFields } from '@controllers/user'
+import { verifyProductFields } from '@controllers/product'
+import { verifyDiscountFields } from '@controllers/discount'
+import { sanitizeValidateValue } from '@utils/sanitizeValues'
+import { Product, ProductModel } from '@models/Product'
+import { Ref } from '@typegoose/typegoose'
+import { DiscountModel } from '@models/Discount'
 
 function addShoppingCart (req: Request, res: Response): void {
   handlePostPromise(createShoppingCartAsync, req, res, shoppingCartSuccess['10000'], shoppingCartError['10000'], ShoppingCart)
 }
 
-async function createShoppingCartAsync (shoppingCart: ShoppingCartReceived): Promise<ShoppingCart> {
-  if (shoppingCart.products.length === 0 || !shoppingCart.costumer || !shoppingCart.payment) {
+async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<ShoppingCart> {
+  if ((shoppingCart.productsRef.length === 0 && shoppingCart.productsFull.length === 0) ||
+      (!shoppingCart.userRef && !shoppingCart.userFull) ||
+      (!shoppingCart.paymentRef && !shoppingCart.paymentFull)) {
     throw shoppingCartError['10006']
   }
   const shoppingCartVerified: ShoppingCart = verifyShoppingCartFields(shoppingCart)
   if (!shoppingCartVerified) {
     throw generalError['801']
   }
+
+  // Handle products, either full or reference, and give shopping cart subtotal, discounted and total values
+  let subtotal = 0
+  let discounted = 0
+  let total = 0
+  if (shoppingCartVerified.productsFull.length > 0) {
+    shoppingCartVerified.productsFull.forEach((productFull: ProductReceived) => {
+      subtotal += productFull.price
+      discounted += productFull.price * productFull.discount.value
+      total += (subtotal - discounted) * productFull.tax
+    })
+  }
+  if (shoppingCartVerified.productsRef.length > 0) {
+    shoppingCartVerified.productsRef.forEach(async (productFull: Ref<Product>) => {
+      const product = await ProductModel.findById(productFull)
+      subtotal += product.price
+      const discount = await DiscountModel.findById(shoppingCartVerified.discountRef)
+      discounted += product.price * discount.value
+      total += (subtotal - discounted) * product.tax
+    })
+  }
   try {
-    shoppingCart._id = new ObjectId()
-    shoppingCart.name = shoppingCartVerified.name
+    const shoppingCartToSave: ShoppingCart = shoppingCartVerified
+    shoppingCartToSave.subtotal = subtotal
+    shoppingCartToSave.discounted = discounted
+    shoppingCartToSave.total = total
+    return await ShoppingCartModel.create(shoppingCartToSave)
+    /*
     const { _id: id } = await ShoppingCartModel.create(shoppingCart)
     return await ShoppingCartModel.findById(id).exec()
+    */
   } catch (err) {
-    throw shoppingCartError['10007']
+    console.log(err)
+    throw shoppingCartError['10000']
   }
 }
 
@@ -103,10 +137,42 @@ async function updateOneShoppingCartTypeAsync (id: string, shoppingCart: Shoppin
   }
 }
 
-function verifyShoppingCartFields (shoppingCart: ShoppingCartReceived): ShoppingCartReceived {
-  shoppingCart.payment = verifyPaymentFields(shoppingCart.payment)
-  // shoppingCart.user = verifyUserFields(shoppingCart.user)
+function verifyShoppingCartFields (shoppingCart: ShoppingCart): ShoppingCart {
+  if (shoppingCart.paymentRef) {
+    verifyObjectId(String(shoppingCart.paymentRef))
+  } else if ((shoppingCart.paymentFull)) {
+    shoppingCart.paymentFull = verifyPaymentFields(shoppingCart.paymentFull)
+  }
 
+  if (shoppingCart.userRef) {
+    verifyObjectId(String(shoppingCart.userRef))
+  } else if ((shoppingCart.userFull)) {
+    shoppingCart.userFull = verifyUserFields(shoppingCart.userFull)
+  }
+
+  if (shoppingCart.productsRef) {
+    shoppingCart.productsRef.forEach((product: Product) => {
+      verifyObjectId(String(product))
+    })
+  } else if (shoppingCart.productsFull) {
+    shoppingCart.productsFull.forEach((product: ProductReceived) => {
+      verifyProductFields(product)
+    })
+  }
+
+  if (shoppingCart.discountRef) {
+    verifyObjectId(String(shoppingCart.discountRef))
+  } else if (shoppingCart.discountFull) {
+    if (!verifyDiscountFields(shoppingCart.discountFull)) throw generalError['801']
+  }
+
+  if (shoppingCart.comments.length > 0) {
+    const comments = []
+    shoppingCart.comments.forEach((comment) => {
+      comments.push(sanitizeValidateValue(typesOfValue.WORD, comment))
+    })
+    shoppingCart.comments = comments
+  }
   return shoppingCart
 }
 

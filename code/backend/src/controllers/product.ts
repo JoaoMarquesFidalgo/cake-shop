@@ -120,7 +120,8 @@ async function updateOneProductTypeAsync (id: string, product: ProductReceived):
           reserved: productToUpdate.reserved,
           weight: productToUpdate.weight,
           discount: productToUpdate.discount,
-          seo: productToUpdate.seo
+          seo: productToUpdate.seo,
+          tax: productToUpdate.tax
         }
       },
       { new: true }).exec()
@@ -135,6 +136,9 @@ function verifyProductFields (productToVerify: ProductReceived): ProductReceived
     throw productError['9005']
   }
   if (!productToVerify.price || !sanitizeValidateValue(typesOfValue.NUMBER, productToVerify.price) || productToVerify.price < 0) {
+    throw productError['9005']
+  }
+  if (!productToVerify.tax || !sanitizeValidateValue(typesOfValue.NUMBER, productToVerify.price) || productToVerify.price < 0) {
     throw productError['9005']
   }
   // ThumbnailUrl, ImageUrl and Url
@@ -158,6 +162,7 @@ async function saveMandatoryProductFields (productToSave: Product, productVerifi
   // Stock, Price, Name
   productToSave.stock = productVerified.stock
   productToSave.price = productVerified.price
+  productToSave.tax = productVerified.tax
   productToSave.name = []
   for (const name of originalProduct.name) {
     productToSave.name.push((await createTranslationAsync(name))._id)
@@ -237,4 +242,4 @@ async function saveOptionalProductFields (productToSave: Product, productVerifie
   productToSave.weight = (originalProduct.weight || !newDoc) ? productVerified.weight : undefined
 }
 
-export { addProduct, getProducts, deleteProduct, getOneProduct, updateOneProduct }
+export { addProduct, getProducts, deleteProduct, getOneProduct, updateOneProduct, verifyProductFields }
