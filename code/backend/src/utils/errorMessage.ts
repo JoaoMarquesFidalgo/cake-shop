@@ -54,79 +54,79 @@ export const paymentError = {
   }
 }
 export const userError = {
-  2000: {
-    error: true,
-    code: 2000,
-    description: 'Couldn\'t add User'
-  },
-  2001: {
-    error: true,
-    code: 2001,
-    description: 'Couldn\'t fetch User'
-  },
-  2002: {
-    error: true,
-    code: 2002,
-    description: 'Couldn\'t disable User'
-  },
-  2003: {
-    error: true,
-    code: 2003,
-    description: 'Couldn\'t return User'
-  },
-  2004: {
-    error: true,
-    code: 2004,
-    description: 'Couldn\'t update User'
-  },
-  2005: {
-    error: true,
-    code: 2005,
-    description: 'No values were passed to update the User'
-  },
-  2006: {
-    error: true,
-    code: 2006,
-    description: 'Missing User fields'
-  },
-  2007: {
-    error: true,
-    code: 2007,
-    description: 'No email was provided'
-  },
-  2008: {
-    error: true,
-    code: 2008,
-    description: 'Email already registered'
-  },
-  2009: {
-    error: true,
-    code: 2009,
-    description: 'State of account must be active'
-  },
-  2010: {
-    error: true,
-    code: 2010,
-    description: 'Email provided in not correct'
-  },
-  2011: {
-    error: true,
-    code: 2011,
-    description: 'Please provide valid information'
-  },
   3000: {
     error: true,
     code: 3000,
-    description: 'Please provide username and password'
+    description: 'Couldn\'t add User'
   },
   3001: {
     error: true,
     code: 3001,
-    description: 'Wrong credentials'
+    description: 'Couldn\'t fetch User'
   },
   3002: {
     error: true,
     code: 3002,
+    description: 'Couldn\'t disable User'
+  },
+  3003: {
+    error: true,
+    code: 3003,
+    description: 'Couldn\'t return User'
+  },
+  3004: {
+    error: true,
+    code: 3004,
+    description: 'Couldn\'t update User'
+  },
+  3005: {
+    error: true,
+    code: 3005,
+    description: 'No values were passed to update the User'
+  },
+  3006: {
+    error: true,
+    code: 3006,
+    description: 'Missing User fields'
+  },
+  3007: {
+    error: true,
+    code: 3007,
+    description: 'No email was provided'
+  },
+  3008: {
+    error: true,
+    code: 3008,
+    description: 'Email already registered'
+  },
+  3009: {
+    error: true,
+    code: 3009,
+    description: 'State of account must be active'
+  },
+  3010: {
+    error: true,
+    code: 3010,
+    description: 'Email provided in not correct'
+  },
+  3011: {
+    error: true,
+    code: 3011,
+    description: 'Please provide valid information'
+  },
+  3012: {
+    error: true,
+    code: 3012,
+    description: 'Please provide username and password'
+  },
+  3013: {
+    error: true,
+    code: 3013,
+    description: 'Wrong credentials'
+  },
+  3014: {
+    error: true,
+    code: 3014,
     description: 'Email already registered'
   }
 }

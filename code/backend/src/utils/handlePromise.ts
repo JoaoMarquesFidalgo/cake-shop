@@ -7,6 +7,7 @@ export function handlePostPromise (functionToCall: Function, req: Request, res: 
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
     .catch((errorMessage) => {
+      console.log(errorMessage)
       if (errorMessage) {
         return res.json(new GeneralResponse({ ...errorMessage }))
       }
@@ -19,7 +20,8 @@ export function handleGetPromise (functionToCall: Function, res: Response, objec
     .then((response: typeof objectType) => {
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err)
       return res.json(new GeneralResponse({ ...objectError }))
     })
 }

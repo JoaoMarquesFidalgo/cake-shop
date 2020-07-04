@@ -8,14 +8,15 @@ router.get('/failed-login', (req: Request, res: Response): void => {
 })
 
 // Each route should be accessible from https://localhost:3000/<name-of-route>
-router.use('/users', require('./users'))
-router.use('/payments', require('./payments'))
-router.use('/costumers', require('./costumers'))
-router.use('/zones', require('./zones'))
-router.use('/type-products', require('./type-products'))
-router.use('/translations', require('./translations'))
-router.use('/seos', require('./seos'))
-router.use('/discounts', require('./discounts'))
-router.use('/products', require('./products'))
+router.use('/user', require('./users'))
+router.use('/payment', require('./payments'))
+router.use('/costumer', require('./costumers'))
+router.use('/zone', require('./zones'))
+router.use('/type-product', require('./type-products'))
+router.use('/translation', require('./translations'))
+router.use('/seo', require('./seos'))
+router.use('/discount', require('./discounts'))
+router.use('/product', require('./products'))
+router.use('/shopping-cart', require('./shopping-carts'))
 
 export default router

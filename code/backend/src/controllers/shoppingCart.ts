@@ -21,9 +21,10 @@ function addShoppingCart (req: Request, res: Response): void {
 }
 
 async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<ShoppingCart> {
-  if ((shoppingCart.productsRef.length === 0 && shoppingCart.productsFull.length === 0) ||
-      (!shoppingCart.userRef && !shoppingCart.userFull) ||
-      (!shoppingCart.paymentRef && !shoppingCart.paymentFull)) {
+  if (((shoppingCart.productsRef === undefined || shoppingCart.productsRef.length === 0) ||
+  !shoppingCart.userRef || !shoppingCart.paymentRef) &&
+    ((shoppingCart.productsFull === undefined || shoppingCart.productsFull.length === 0) ||
+    !shoppingCart.userFull || !shoppingCart.paymentFull)) {
     throw shoppingCartError['10006']
   }
   const shoppingCartVerified: ShoppingCart = verifyShoppingCartFields(shoppingCart)
@@ -57,10 +58,6 @@ async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<Sho
     shoppingCartToSave.discounted = discounted
     shoppingCartToSave.total = total
     return await ShoppingCartModel.create(shoppingCartToSave)
-    /*
-    const { _id: id } = await ShoppingCartModel.create(shoppingCart)
-    return await ShoppingCartModel.findById(id).exec()
-    */
   } catch (err) {
     console.log(err)
     throw shoppingCartError['10000']
@@ -118,15 +115,11 @@ async function updateOneShoppingCartTypeAsync (id: string, shoppingCart: Shoppin
   if (Object.keys(shoppingCart).length === 0) {
     throw shoppingCartError['10005']
   }
-  if (!shoppingCart.name) {
-    throw shoppingCartError['10006']
-  }
   const shoppingCartVerified: ShoppingCart = verifyShoppingCartFields(shoppingCart)
   if (!shoppingCartVerified) {
     throw generalError['801']
   }
   try {
-    shoppingCart.name = shoppingCartVerified.name
     const getOneShoppingCart = await ShoppingCartModel.findByIdAndUpdate(id, shoppingCart, { new: true }).exec()
     if (!getOneShoppingCart) {
       throw shoppingCartError['10004']
@@ -140,13 +133,13 @@ async function updateOneShoppingCartTypeAsync (id: string, shoppingCart: Shoppin
 function verifyShoppingCartFields (shoppingCart: ShoppingCart): ShoppingCart {
   if (shoppingCart.paymentRef) {
     verifyObjectId(String(shoppingCart.paymentRef))
-  } else if ((shoppingCart.paymentFull)) {
+  } else if (shoppingCart.paymentFull) {
     shoppingCart.paymentFull = verifyPaymentFields(shoppingCart.paymentFull)
   }
 
   if (shoppingCart.userRef) {
     verifyObjectId(String(shoppingCart.userRef))
-  } else if ((shoppingCart.userFull)) {
+  } else if (shoppingCart.userFull) {
     shoppingCart.userFull = verifyUserFields(shoppingCart.userFull)
   }
 

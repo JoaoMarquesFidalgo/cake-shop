@@ -11,18 +11,18 @@ import { sanitizeValidateValue } from '@utils/sanitizeValues'
 import { typesOfValue } from '@enum/typesValues'
 
 function authenticateUser (req: Request, res: Response) {
-  handleAuthPromise(authenticateUserAsync, req, res, userSuccess['3001'], userError['3001'], User)
+  handleAuthPromise(authenticateUserAsync, req, res, userSuccess['3001'], userError['3011'], User)
 }
 
 async function authenticateUserAsync (user: User) {
   const userFound = await UserModel.findOne({ email: user.email })
   if (!userFound) {
-    throw userError['3001']
+    throw userError['3013']
   }
 
   const isValid = utils.validPassword(user.password, userFound.hash, userFound.salt)
   if (!isValid) {
-    throw userError['3001']
+    throw userError['3013']
   }
 
   const tokenObject = utils.issueJWT(userFound)
@@ -32,20 +32,20 @@ async function authenticateUserAsync (user: User) {
 }
 
 function registerUser (req: Request, res: Response) {
-  handlePostPromise(registerUserAsync, req, res, userSuccess['3000'], userError['3001'], User)
+  handlePostPromise(registerUserAsync, req, res, userSuccess['3000'], userError['3000'], User)
 }
 
 async function registerUserAsync (user: User): Promise<User> {
   if (!user.email) {
     throw userError['3000']
   }
-
+  let newUser = new User()
+  newUser = verifyUserFields(user)
   const saltHash = utils.genPassword(user.password)
 
   const salt = saltHash.salt
   const hash = saltHash.hash
 
-  const newUser = new UserModel()
   newUser._id = new ObjectId()
   newUser.email = user.email
   newUser.hash = hash
@@ -56,12 +56,12 @@ async function registerUserAsync (user: User): Promise<User> {
   try {
     return await UserModel.create(newUser)
   } catch (error) {
-    throw userError['3002']
+    throw userError['3000']
   }
 }
 
 function getUsers (req: Request, res: Response) {
-  handleGetPromise(getUsersAsync, res, userSuccess['2001'], userError['2001'], User)
+  handleGetPromise(getUsersAsync, res, userSuccess['3004'], userError['3001'], User)
 }
 
 async function getUsersAsync (): Promise<User[]> {
@@ -72,7 +72,7 @@ async function getUsersAsync (): Promise<User[]> {
 }
 
 function disableUser (req: Request, res: Response) {
-  handleDeletePromise(req.params.id, disableUserAsync, res, userSuccess['2002'], userError['2002'], User)
+  handleDeletePromise(req.params.id, disableUserAsync, res, userSuccess['3005'], userError['3002'], User)
 }
 
 async function disableUserAsync (id: string): Promise<User> {
@@ -82,14 +82,14 @@ async function disableUserAsync (id: string): Promise<User> {
 
   const userFound = await UserModel.findById(id).exec()
   if (!userFound) {
-    throw userError['2002']
+    throw userError['3002']
   }
 
-  return await UserModel.updateOne({ _id: id }, { $set: { active: !userFound.active } }).exec()
+  return await UserModel.findByIdAndUpdate(id, { $set: { active: !userFound.active } }).exec()
 }
 
 function getOneUser (req: Request, res: Response) {
-  handleGetOnePromise(req.params.id, getOneUserAsync, res, userSuccess['2003'], userError['2003'], User)
+  handleGetOnePromise(req.params.id, getOneUserAsync, res, userSuccess['3006'], userError['3003'], User)
 }
 
 async function getOneUserAsync (id: string): Promise<User> {
@@ -99,13 +99,13 @@ async function getOneUserAsync (id: string): Promise<User> {
 
   const getOneUser = await UserModel.findById(id).exec()
   if (!getOneUser) {
-    throw userError['2003']
+    throw userError['3003']
   }
   return getOneUser
 }
 
 function updateOneUser (req: Request, res: Response) {
-  handleUpdatePromise(req.params.id, updateOneUserTypeAsync, req, res, userSuccess['2004'], userError['2004'], User)
+  handleUpdatePromise(req.params.id, updateOneUserTypeAsync, req, res, userSuccess['3007'], userError['3004'], User)
 }
 
 async function updateOneUserTypeAsync (id: string, user: User): Promise<User> {
@@ -113,29 +113,37 @@ async function updateOneUserTypeAsync (id: string, user: User): Promise<User> {
     throw generalError['800']
   }
   if (Object.keys(user).length === 0) {
-    throw userError['2005']
+    throw userError['3005']
   }
   if (!user.email) {
-    throw userError['2006']
+    throw userError['3006']
   }
   const userVerified: User = verifyUserFields(user)
   if (!userVerified) {
     throw generalError['801']
   }
+  if (user.password) {
+    const saltHash = utils.genPassword(user.password)
+    userVerified.salt = saltHash.salt
+    userVerified.hash = saltHash.hash
+    userVerified.password = undefined
+  }
+
   try {
-    const getOneUser = await UserModel.findByIdAndUpdate(id, user, { new: true }).exec()
-    if (!getOneUser) {
-      throw userError['2004']
-    }
-    return getOneUser
+    return await UserModel.findByIdAndUpdate(id, user, { new: true }).exec()
   } catch (err) {
-    throw userError['2007']
+    throw userError['3008']
   }
 }
 
 function verifyUserFields (user: User): User {
-  user.email = String(sanitizeValidateValue(typesOfValue.WORD, user.email))
-  user.name = String(sanitizeValidateValue(typesOfValue.WORD, user.name))
+  const email = sanitizeValidateValue(typesOfValue.EMAIL, user.email)
+  if (email) {
+    user.email = String(email)
+  } else {
+    throw userError['3010']
+  }
+  if (user.name) user.name = String(sanitizeValidateValue(typesOfValue.WORD, user.name))
   return user
 }
 
