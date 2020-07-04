@@ -8,6 +8,11 @@ export const generalError = {
     error: true,
     code: 801,
     description: 'Please provide valid information'
+  },
+  802: {
+    error: true,
+    code: 802,
+    description: 'There was an error processing the request'
   }
 }
 

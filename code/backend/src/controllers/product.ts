@@ -12,6 +12,7 @@ import { createZoneAsync, getZonesAsync } from '@controllers/zone'
 import { createDiscountAsync, getDiscountsAsync } from '@controllers/discount'
 import { createSeoAsync } from '@controllers/seo'
 import { Product, ProductModel } from '@models/Product'
+import { ObjectId } from 'mongodb'
 
 function addProduct (req: Request, res: Response): void {
   handlePostPromise(createProductAsync, req, res, productSuccess['9000'], productError['9000'], ProductReceivedModel)
@@ -26,6 +27,7 @@ async function createProductAsync (product: ProductReceived): Promise<Product> {
     throw generalError['801']
   }
   const productToSave = new Product()
+  productToSave._id = new ObjectId()
 
   // Mandatory Product Fields
   await saveMandatoryProductFields(productToSave, productVerified, product)
@@ -242,4 +244,4 @@ async function saveOptionalProductFields (productToSave: Product, productVerifie
   productToSave.weight = (originalProduct.weight || !newDoc) ? productVerified.weight : undefined
 }
 
-export { addProduct, getProducts, deleteProduct, getOneProduct, updateOneProduct, verifyProductFields }
+export { addProduct, getProducts, deleteProduct, getOneProduct, updateOneProduct, verifyProductFields, createProductAsync }

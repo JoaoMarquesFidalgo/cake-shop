@@ -1,10 +1,11 @@
-import { ProductReceived } from './ProductReceived'
-import { User } from './User'
+import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
+
 import { Discount } from './Discount'
 import { Payment } from './Payment'
-import { prop, Ref, getModelForClass } from '@typegoose/typegoose'
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import { Product } from './Product'
+import { ProductReceived } from './ProductReceived'
+import { User } from './User'
 
 export class ShoppingCart extends TimeStamps {
   @prop()
@@ -22,25 +23,22 @@ export class ShoppingCart extends TimeStamps {
   @prop({ ref: User, default: undefined })
   public userRef?: Ref<User>;
 
-  @prop()
-  public userFull?: User;
-
   @prop({ ref: Discount, default: undefined })
   public discountRef?: Ref<Discount>;
 
-  @prop()
+  @prop({ ref: Discount, default: undefined })
   public discountFull?: Discount;
 
   @prop({ ref: Product, default: undefined })
   public productsRef?: Ref<Product>[];
 
-  @prop()
+  @prop({ ref: ProductReceived, default: undefined })
   public productsFull?: ProductReceived[];
 
   @prop({ ref: Payment, default: undefined })
   public paymentRef?: Ref<Payment>;
 
-  @prop()
+  @prop({ ref: Payment, default: undefined })
   public paymentFull?: Payment;
 }
 

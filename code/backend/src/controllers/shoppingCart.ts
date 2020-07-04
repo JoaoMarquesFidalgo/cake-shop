@@ -1,20 +1,18 @@
-import { ProductReceived } from './../models/ProductReceived'
-import { typesOfValue } from 'src/enum/typesValues'
-import { shoppingCartError, generalError } from '@utils/errorMessage'
-import { Request, Response } from 'express'
-import { ShoppingCartModel, ShoppingCart } from '@models/ShoppingCart'
-import { shoppingCartSuccess } from '@utils/successMessage'
-import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
-import { verifyObjectId } from '@utils/verifyObjectId'
-
-import { verifyPaymentFields } from '@controllers/payment'
-import { verifyUserFields } from '@controllers/user'
-import { verifyProductFields } from '@controllers/product'
 import { verifyDiscountFields } from '@controllers/discount'
-import { sanitizeValidateValue } from '@utils/sanitizeValues'
-import { Product, ProductModel } from '@models/Product'
-import { Ref } from '@typegoose/typegoose'
+import { verifyPaymentFields } from '@controllers/payment'
+import { createProductAsync, verifyProductFields } from '@controllers/product'
+import { typesOfValue } from '@enum/typesValues'
 import { DiscountModel } from '@models/Discount'
+import { Product, ProductModel } from '@models/Product'
+import { ProductReceived } from '@models/ProductReceived'
+import { ShoppingCart, ShoppingCartModel } from '@models/ShoppingCart'
+import { generalError, shoppingCartError } from '@utils/errorMessage'
+import { handleDeletePromise, handleGetOnePromise, handleGetPromise, handlePostPromise, handleUpdatePromise } from '@utils/handlePromise'
+import { sanitizeValidateValue } from '@utils/sanitizeValues'
+import { shoppingCartSuccess } from '@utils/successMessage'
+import { verifyObjectId } from '@utils/verifyObjectId'
+import { Request, Response } from 'express'
+import { ObjectId } from 'mongodb'
 
 function addShoppingCart (req: Request, res: Response): void {
   handlePostPromise(createShoppingCartAsync, req, res, shoppingCartSuccess['10000'], shoppingCartError['10000'], ShoppingCart)
@@ -23,8 +21,7 @@ function addShoppingCart (req: Request, res: Response): void {
 async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<ShoppingCart> {
   if (((shoppingCart.productsRef === undefined || shoppingCart.productsRef.length === 0) ||
   !shoppingCart.userRef || !shoppingCart.paymentRef) &&
-    ((shoppingCart.productsFull === undefined || shoppingCart.productsFull.length === 0) ||
-    !shoppingCart.userFull || !shoppingCart.paymentFull)) {
+    ((shoppingCart.productsFull === undefined || shoppingCart.productsFull.length === 0) || !shoppingCart.paymentFull)) {
     throw shoppingCartError['10006']
   }
   const shoppingCartVerified: ShoppingCart = verifyShoppingCartFields(shoppingCart)
@@ -36,21 +33,27 @@ async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<Sho
   let subtotal = 0
   let discounted = 0
   let total = 0
-  if (shoppingCartVerified.productsFull.length > 0) {
-    shoppingCartVerified.productsFull.forEach((productFull: ProductReceived) => {
+  if (shoppingCartVerified.productsFull && shoppingCartVerified.productsFull.length > 0) {
+    for (const productFull of shoppingCartVerified.productsFull) {
+      const productInserted = await createProductAsync(productFull)
+      productFull._id = productInserted._id
       subtotal += productFull.price
-      discounted += productFull.price * productFull.discount.value
+      if (productFull.discount) discounted += productFull.price * productFull.discount.value
       total += (subtotal - discounted) * productFull.tax
-    })
+    }
   }
-  if (shoppingCartVerified.productsRef.length > 0) {
-    shoppingCartVerified.productsRef.forEach(async (productFull: Ref<Product>) => {
-      const product = await ProductModel.findById(productFull)
-      subtotal += product.price
-      const discount = await DiscountModel.findById(shoppingCartVerified.discountRef)
-      discounted += product.price * discount.value
-      total += (subtotal - discounted) * product.tax
-    })
+  if (shoppingCartVerified.productsRef && shoppingCartVerified.productsRef.length > 0) {
+    for (const productRef of shoppingCartVerified.productsRef) {
+      try {
+        const product = await ProductModel.findById(productRef)
+        subtotal += product.price
+        const discount = await DiscountModel.findById(shoppingCartVerified.discountRef)
+        discounted += product.price * discount.value
+        total += (subtotal - discounted) * (1 - product.tax)
+      } catch (error) {
+        throw generalError['802']
+      }
+    }
   }
   try {
     const shoppingCartToSave: ShoppingCart = shoppingCartVerified
@@ -69,7 +72,35 @@ function getShoppingCarts (req: Request, res: Response) {
 }
 
 async function getShoppingCartsAsync (): Promise<ShoppingCart[]> {
-  return await ShoppingCartModel.find().exec()
+  return await ShoppingCartModel.find().populate('productsRef').populate('userRef')
+    .populate('discountRef').populate('paymentRef')
+    .populate('paymentFull').populate({
+      path: 'productsFull',
+      model: 'Product'
+    }).populate({
+      path: 'discountFull',
+      model: 'Discount'
+    }).populate({
+      path: 'paymentFull',
+      model: 'Payment'
+    }).populate({
+      path: 'paymentFull',
+      model: 'Payment'
+    }).populate({
+      path: 'productsFull',
+      model: 'Product',
+      populate: {
+        path: 'name',
+        model: 'Translation'
+      }
+    }).populate({
+      path: 'productsRef',
+      model: 'Product',
+      populate: {
+        path: 'name',
+        model: 'Translation'
+      }
+    }).exec()
 }
 
 function deleteShoppingCart (req: Request, res: Response) {
@@ -97,7 +128,35 @@ async function getOneShoppingCartAsync (id: string): Promise<ShoppingCart> {
     throw generalError['800']
   }
 
-  const getOneShoppingCart = await ShoppingCartModel.findById(id).exec()
+  const getOneShoppingCart = await ShoppingCartModel.findById(id).populate('productsRef')
+    .populate('userRef').populate('discountRef').populate('paymentRef')
+    .populate('paymentFull').populate({
+      path: 'productsFull',
+      model: 'Product'
+    }).populate({
+      path: 'discountFull',
+      model: 'Discount'
+    }).populate({
+      path: 'paymentFull',
+      model: 'Payment'
+    }).populate({
+      path: 'paymentFull',
+      model: 'Payment'
+    }).populate({
+      path: 'productsFull',
+      model: 'Product',
+      populate: {
+        path: 'name',
+        model: 'Translation'
+      }
+    }).populate({
+      path: 'productsRef',
+      model: 'Product',
+      populate: {
+        path: 'name',
+        model: 'Translation'
+      }
+    }).exec()
   if (!getOneShoppingCart) {
     throw shoppingCartError['10003']
   }
@@ -131,18 +190,22 @@ async function updateOneShoppingCartTypeAsync (id: string, shoppingCart: Shoppin
 }
 
 function verifyShoppingCartFields (shoppingCart: ShoppingCart): ShoppingCart {
+  // Payment method
   if (shoppingCart.paymentRef) {
     verifyObjectId(String(shoppingCart.paymentRef))
   } else if (shoppingCart.paymentFull) {
     shoppingCart.paymentFull = verifyPaymentFields(shoppingCart.paymentFull)
   }
 
-  if (shoppingCart.userRef) {
-    verifyObjectId(String(shoppingCart.userRef))
-  } else if (shoppingCart.userFull) {
-    shoppingCart.userFull = verifyUserFields(shoppingCart.userFull)
+  // User
+  const userRefValidated = verifyObjectId(String(shoppingCart.userRef))
+  if (userRefValidated) {
+    shoppingCart.userRef = new ObjectId(String(shoppingCart.userRef))
+  } else {
+    throw generalError['800']
   }
 
+  // Products
   if (shoppingCart.productsRef) {
     shoppingCart.productsRef.forEach((product: Product) => {
       verifyObjectId(String(product))
@@ -153,12 +216,14 @@ function verifyShoppingCartFields (shoppingCart: ShoppingCart): ShoppingCart {
     })
   }
 
+  // Discount
   if (shoppingCart.discountRef) {
     verifyObjectId(String(shoppingCart.discountRef))
   } else if (shoppingCart.discountFull) {
     if (!verifyDiscountFields(shoppingCart.discountFull)) throw generalError['801']
   }
 
+  // Comments
   if (shoppingCart.comments.length > 0) {
     const comments = []
     shoppingCart.comments.forEach((comment) => {
