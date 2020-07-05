@@ -21,7 +21,8 @@ function addShoppingCart (req: Request, res: Response): void {
 async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<ShoppingCart> {
   if (((shoppingCart.productsRef === undefined || shoppingCart.productsRef.length === 0) ||
   !shoppingCart.userRef || !shoppingCart.paymentRef) &&
-    ((shoppingCart.productsFull === undefined || shoppingCart.productsFull.length === 0) || !shoppingCart.paymentFull)) {
+    ((shoppingCart.productsFull === undefined || shoppingCart.productsFull.length === 0) ||
+    !shoppingCart.paymentFull)) {
     throw shoppingCartError['10006']
   }
   const shoppingCartVerified: ShoppingCart = verifyShoppingCartFields(shoppingCart)
@@ -29,42 +30,17 @@ async function createShoppingCartAsync (shoppingCart: ShoppingCart): Promise<Sho
     throw generalError['801']
   }
 
-  // Handle products, either full or reference, and give shopping cart subtotal, discounted and total values
-  let subtotal = 0
-  let discounted = 0
-  let total = 0
-  if (shoppingCartVerified.productsFull && shoppingCartVerified.productsFull.length > 0) {
-    for (const productFull of shoppingCartVerified.productsFull) {
-      const productInserted = await createProductAsync(productFull)
-      productFull._id = productInserted._id
-      subtotal += productFull.price
-      if (productFull.discount) discounted += productFull.price * productFull.discount.value
-      total += (subtotal - discounted) * productFull.tax
+  shoppingCartVerified.subtotal = shoppingCartVerified.discounted = shoppingCartVerified.total = 0
+
+  return handleProductsAndValues(shoppingCartVerified).then(async (returnedObject: ShoppingCart) => {
+    try {
+      return await ShoppingCartModel.create(returnedObject)
+    } catch (err) {
+      throw shoppingCartError['10000']
     }
-  }
-  if (shoppingCartVerified.productsRef && shoppingCartVerified.productsRef.length > 0) {
-    for (const productRef of shoppingCartVerified.productsRef) {
-      try {
-        const product = await ProductModel.findById(productRef)
-        subtotal += product.price
-        const discount = await DiscountModel.findById(shoppingCartVerified.discountRef)
-        discounted += product.price * discount.value
-        total += (subtotal - discounted) * (1 - product.tax)
-      } catch (error) {
-        throw generalError['802']
-      }
-    }
-  }
-  try {
-    const shoppingCartToSave: ShoppingCart = shoppingCartVerified
-    shoppingCartToSave.subtotal = subtotal
-    shoppingCartToSave.discounted = discounted
-    shoppingCartToSave.total = total
-    return await ShoppingCartModel.create(shoppingCartToSave)
-  } catch (err) {
-    console.log(err)
-    throw shoppingCartError['10000']
-  }
+  }).catch(() => {
+    throw generalError['802']
+  })
 }
 
 function getShoppingCarts (req: Request, res: Response) {
@@ -178,15 +154,24 @@ async function updateOneShoppingCartTypeAsync (id: string, shoppingCart: Shoppin
   if (!shoppingCartVerified) {
     throw generalError['801']
   }
-  try {
-    const getOneShoppingCart = await ShoppingCartModel.findByIdAndUpdate(id, shoppingCart, { new: true }).exec()
-    if (!getOneShoppingCart) {
+  shoppingCartVerified.subtotal = shoppingCartVerified.discounted = shoppingCartVerified.total = 0
+
+  return handleProductsAndValues(shoppingCartVerified).then(async (returnedObject: ShoppingCart) => {
+    try {
+      const objectToUpdate = await ShoppingCartModel.findById(id).lean().exec()
+      Object.getOwnPropertyNames(objectToUpdate).forEach((val) => {
+        if (returnedObject[val] === undefined &&
+          (val !== '_id' && val !== 'createdAt' && val !== 'updatedAt' && val !== '__v')) {
+          objectToUpdate[val] = undefined
+        }
+      })
+      return await ShoppingCartModel.findByIdAndUpdate(id, objectToUpdate, { new: true }).exec()
+    } catch (err) {
       throw shoppingCartError['10004']
     }
-    return getOneShoppingCart
-  } catch (err) {
-    throw shoppingCartError['10007']
-  }
+  }).catch(() => {
+    throw generalError['802']
+  })
 }
 
 function verifyShoppingCartFields (shoppingCart: ShoppingCart): ShoppingCart {
@@ -232,6 +217,33 @@ function verifyShoppingCartFields (shoppingCart: ShoppingCart): ShoppingCart {
     shoppingCart.comments = comments
   }
   return shoppingCart
+}
+
+async function handleProductsAndValues (shoppingCartVerified: ShoppingCart): Promise<ShoppingCart> {
+  // Handle products, either full or reference, and give shopping cart subtotal, discounted and total values
+  if (shoppingCartVerified.productsFull && shoppingCartVerified.productsFull.length > 0) {
+    for (const productFull of shoppingCartVerified.productsFull) {
+      const productInserted = await createProductAsync(productFull)
+      productFull._id = productInserted._id
+      shoppingCartVerified.subtotal += productFull.price
+      if (productFull.discount) shoppingCartVerified.discounted += productFull.price * productFull.discount.value
+      shoppingCartVerified.total += (shoppingCartVerified.subtotal - shoppingCartVerified.discounted) * productFull.tax
+    }
+  }
+  if (shoppingCartVerified.productsRef && shoppingCartVerified.productsRef.length > 0) {
+    for (const productRef of shoppingCartVerified.productsRef) {
+      try {
+        const product = await ProductModel.findById(productRef)
+        shoppingCartVerified.subtotal += product.price
+        const discount = await DiscountModel.findById(shoppingCartVerified.discountRef)
+        shoppingCartVerified.discounted += product.price * discount.value
+        shoppingCartVerified.total += (shoppingCartVerified.subtotal - shoppingCartVerified.discounted) * (1 - product.tax)
+      } catch (error) {
+        throw generalError['802']
+      }
+    }
+  }
+  return shoppingCartVerified
 }
 
 export { addShoppingCart, getShoppingCarts, deleteShoppingCart, getOneShoppingCart, updateOneShoppingCart, verifyShoppingCartFields, createShoppingCartAsync, getShoppingCartsAsync }

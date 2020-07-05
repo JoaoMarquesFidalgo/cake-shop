@@ -1,5 +1,5 @@
 import { GeneralResponse } from '@models/GeneralResponse'
-import { Response, Request } from 'express'
+import { Request, Response } from 'express'
 
 export function handlePostPromise (functionToCall: Function, req: Request, res: Response, objectSuccess: Object, objectError: Object, objectType: Object) {
   functionToCall(req.body)
@@ -7,7 +7,6 @@ export function handlePostPromise (functionToCall: Function, req: Request, res: 
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
     .catch((errorMessage) => {
-      console.log(errorMessage)
       if (errorMessage) {
         return res.json(new GeneralResponse({ ...errorMessage }))
       }
@@ -20,8 +19,7 @@ export function handleGetPromise (functionToCall: Function, res: Response, objec
     .then((response: typeof objectType) => {
       return res.json(new GeneralResponse({ response, ...objectSuccess }))
     })
-    .catch((err) => {
-      console.log(err)
+    .catch(() => {
       return res.json(new GeneralResponse({ ...objectError }))
     })
 }
