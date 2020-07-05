@@ -18,6 +18,14 @@ The frontend will use ReactJS.
 
 ## Log of Events
 
+05/07/2020 -
+
+Add Manager, Content Manager and define which middleware the routes have. Complete the API by creating favorite and shared products, support ticket and page.
+
+30/06/2020 - 05/07/2020
+
+Added Models, Rest Controllers and Routes for User, Product, Shopping Cart and all other adjacent collections.
+
 22/06/2020 - 30/06/2020
 
 Added Passport + JWT and Passport-Facebook authentication with an index.html file to test the routes. 
