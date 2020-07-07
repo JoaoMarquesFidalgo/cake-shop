@@ -20,7 +20,8 @@ The frontend will use ReactJS.
 
 05/07/2020 -
 
-Add Manager, Content Manager and define which middleware the routes have. Complete the API by creating favorite and shared products, support ticket and page.
+<strike>Add Manager, Content Manager and define which middleware the routes have. Complete the API by creating favorite and shared products, support ticket and page.</strike>
+Add unit and integration testing using Jest.
 
 30/06/2020 - 05/07/2020
 
