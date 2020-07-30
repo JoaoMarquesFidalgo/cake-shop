@@ -1,61 +1,37 @@
 import { Discount } from '@models/Discount'
-import { Seo } from './Seo'
-import { Zone } from './Zone'
-import { TypeProduct } from './TypeProduct'
-import { Translation } from './Translation'
-import { prop, getModelForClass } from '@typegoose/typegoose'
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
-import * as mongoose from 'mongoose'
-type ObjectId = mongoose.Types.ObjectId;
+import { Seo } from '@models/Seo'
+import { Translation } from '@models/Translation'
+import { TypeProduct } from '@models/TypeProduct'
+import { Zone } from '@models/Zone'
 
-export class ProductReceived extends TimeStamps {
-  @prop({ required: true, type: mongoose.Schema.Types.ObjectId })
-  public _id?: ObjectId;
-
-  @prop()
+export class ProductReceived {
   public name: Translation[];
 
-  @prop({ default: undefined })
   public description?: Translation[];
 
-  @prop()
   public thumbnailUrl?: string;
 
-  @prop({ default: undefined })
   public imageUrl?: string[];
 
-  @prop({ default: undefined })
   public typesOfProduct?: TypeProduct[];
 
-  @prop({ default: undefined })
   public fromZone?: Zone;
 
-  @prop()
   public stock: number;
 
-  @prop()
   public reserved?: number;
 
-  @prop()
   public price: number;
 
-  @prop()
   public weight?: number;
 
-  @prop({ default: undefined })
   public discount?: Discount;
 
-  @prop({ default: undefined })
   public seo?: Seo;
 
-  @prop()
   public url?: string;
 
-  @prop()
   public newDoc?: boolean;
 
-  @prop()
   public tax: number;
 }
-
-export const ProductReceivedModel = getModelForClass(ProductReceived)

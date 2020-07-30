@@ -1,11 +1,10 @@
+import { Discount } from '@models/Discount'
+import { Payment } from '@models/Payment'
+import { Product } from '@models/Product'
+import { ProductReceived } from '@models/ProductReceived'
+import { User } from '@models/User'
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
-
-import { Discount } from './Discount'
-import { Payment } from './Payment'
-import { Product } from './Product'
-import { ProductReceived } from './ProductReceived'
-import { User } from './User'
 
 export class ShoppingCart extends TimeStamps {
   @prop()

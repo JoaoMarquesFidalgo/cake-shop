@@ -1,29 +1,29 @@
-import { costumerError, generalError } from '@utils/errorMessage'
-import { Request, Response } from 'express'
-import { CostumerModel, Costumer } from '@models/Costumer'
-import { costumerSuccess } from '@utils/successMessage'
-import { handlePostPromise, handleGetPromise, handleDeletePromise, handleGetOnePromise, handleUpdatePromise } from '@utils/handlePromise'
+import { Costumer, CostumerModel } from '@models/Costumer'
+import { generalError, userError } from '@utils/errorMessage'
+import { handleDeletePromise, handleGetOnePromise, handleGetPromise, handlePostPromise, handleUpdatePromise } from '@utils/handlePromise'
 import { sanitizeValidateValue } from '@utils/sanitizeValues'
-import { typesOfValue } from 'src/enum/typesValues'
+import { costumerSuccess } from '@utils/successMessage'
 import { verifyObjectId } from '@utils/verifyObjectId'
+import { Request, Response } from 'express'
+import { typesOfValue } from 'src/enum/typesValues'
 
 function addCostumer (req: Request, res: Response): void {
-  handlePostPromise(createCostumerAsync, req, res, costumerSuccess['2000'], costumerError['2000'], Costumer)
+  handlePostPromise(createCostumerAsync, req, res, costumerSuccess['2000'], userError['3000'], Costumer)
 }
 
 async function createCostumerAsync (costumer: Costumer): Promise<Costumer> {
   if (!costumer.email) {
-    throw costumerError['2007']
+    throw userError['3007']
   }
   const emailExists = await CostumerModel.findOne({ email: costumer.email })
   if (emailExists) {
-    throw costumerError['2008']
+    throw userError['3008']
   }
   if (!costumer.facebookAuth && (!costumer.name || !costumer.password)) {
-    throw costumerError['2006']
+    throw userError['3006']
   }
   if (!costumer.facebookAuth && !verifyCostumerFields(costumer)) {
-    throw costumerError['2011']
+    throw userError['3011']
   }
 
   costumer.stateOfAccount = 'active'
@@ -32,7 +32,7 @@ async function createCostumerAsync (costumer: Costumer): Promise<Costumer> {
 }
 
 function getCostumers (req: Request, res: Response) {
-  handleGetPromise(getCostumersAsync, res, costumerSuccess['2001'], costumerError['2001'], Costumer)
+  handleGetPromise(getCostumersAsync, res, costumerSuccess['2001'], userError['3001'], Costumer)
 }
 
 async function getCostumersAsync (): Promise<Costumer[]> {
@@ -40,7 +40,7 @@ async function getCostumersAsync (): Promise<Costumer[]> {
 }
 
 function disableCostumer (req: Request, res: Response) {
-  handleDeletePromise(req.params.id, disableCostumerAsync, res, costumerSuccess['2002'], costumerError['2002'], Costumer)
+  handleDeletePromise(req.params.id, disableCostumerAsync, res, costumerSuccess['2002'], userError['3002'], Costumer)
 }
 
 async function disableCostumerAsync (id: string): Promise<Costumer> {
@@ -50,13 +50,13 @@ async function disableCostumerAsync (id: string): Promise<Costumer> {
 
   const disabled = await CostumerModel.findOneAndUpdate({ _id: id }, { stateOfAccount: 'disabled' }, { new: true }).exec()
   if (!disabled) {
-    throw costumerError['2002']
+    throw userError['3002']
   }
   return disabled
 }
 
 function getOneCostumer (req: Request, res: Response) {
-  handleGetOnePromise(req.params.id, getOneCostumerAsync, res, costumerSuccess['2003'], costumerError['2003'], Costumer)
+  handleGetOnePromise(req.params.id, getOneCostumerAsync, res, costumerSuccess['2003'], userError['3003'], Costumer)
 }
 
 async function getOneCostumerAsync (id: string): Promise<Costumer> {
@@ -65,13 +65,13 @@ async function getOneCostumerAsync (id: string): Promise<Costumer> {
   }
   const getOneCostumer = await CostumerModel.findById(id).exec()
   if (!getOneCostumer) {
-    throw costumerError['2003']
+    throw userError['3003']
   }
   return getOneCostumer
 }
 
 function updateOneCostumer (req: Request, res: Response) {
-  handleUpdatePromise(req.params.id, updateOneCostumerTypeAsync, req, res, costumerSuccess['2004'], costumerError['2004'], Costumer)
+  handleUpdatePromise(req.params.id, updateOneCostumerTypeAsync, req, res, costumerSuccess['2004'], userError['3004'], Costumer)
 }
 
 async function updateOneCostumerTypeAsync (id: string, costumer: Costumer): Promise<Costumer> {
@@ -79,21 +79,21 @@ async function updateOneCostumerTypeAsync (id: string, costumer: Costumer): Prom
     throw generalError['800']
   }
   if (Object.keys(costumer).length === 0) {
-    throw costumerError['2005']
+    throw userError['3005']
   }
   if (!costumer.email) {
-    throw costumerError['2006']
+    throw userError['3006']
   }
   if (!costumer.facebookAuth && (!costumer.name || !costumer.password)) {
-    throw costumerError['2006']
+    throw userError['3006']
   }
   if (!verifyCostumerFields(costumer)) {
-    throw costumerError['2011']
+    throw userError['3011']
   }
 
   const getOneCostumer = await CostumerModel.findByIdAndUpdate(id, costumer, { new: true }).exec()
   if (!getOneCostumer) {
-    throw costumerError['2004']
+    throw userError['3004']
   }
   return getOneCostumer
 }

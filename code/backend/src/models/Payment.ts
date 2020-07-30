@@ -1,14 +1,20 @@
-import { prop, getModelForClass } from '@typegoose/typegoose'
+import { getModelForClass, prop } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
+import * as mongoose from 'mongoose'
+
+type ObjectId = mongoose.Types.ObjectId;
 
 export class Payment extends TimeStamps {
-  @prop()
+  @prop({ required: true, type: mongoose.Schema.Types.ObjectId })
+  public _id?: ObjectId;
+
+  @prop({ required: true })
   public paymentMethod: string;
 
-  @prop()
+  @prop({ required: true })
   public paymentStatus: string;
 
-  @prop()
+  @prop({ required: true })
   public deliveryStatus: string;
 }
 

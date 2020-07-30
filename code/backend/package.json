@@ -32,6 +32,7 @@
     "@types/bluebird": "^3.5.32",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.6",
+    "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.0",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongodb": "^3.5.23",
@@ -51,6 +52,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "faker": "^4.1.0",
     "jest": "^26.0.1",
     "ts-jest": "^26.1.0",
     "ts-node-dev": "^1.0.0-pre.49",
@@ -60,9 +62,9 @@
   "scripts": {
     "watch-ts": "tsc -w",
     "dev": "nodemon --exec \"ts-node-dev\" --inspect=0.0.0.0:9000 -r tsconfig-paths/register --respawn --transpileOnly --ignore-watch node_modules --no-notify src/server.ts",
-    "test": "jest",
     "build": "babel src --extensions \".js,.ts\", --out-dir dist --copy-files --no-copy-ignored --source-maps",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --onlyChanged"
   },
   "author": "",
   "license": "ISC"
