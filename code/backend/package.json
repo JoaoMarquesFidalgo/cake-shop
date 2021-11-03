@@ -19,7 +19,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "source-map-support": "^0.5.19",
-    "validator": "^13.1.1"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.3",
